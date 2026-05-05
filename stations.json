@@ -1,0 +1,2202 @@
+[
+  {
+    "name": "89 A Radio Rock",
+    "genre": "Rock",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18100,
+    "source": "https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO_89FM_ADP.aac?dist=site-89fm"
+  },
+  {
+    "name": "Kiss FM SP",
+    "genre": "Rock",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18101,
+    "source": "https://cloud1.cdnseguro.com:9758/stream"
+  },
+  {
+    "name": "Antena 1",
+    "genre": "Adult Contemporary",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18102,
+    "source": "https://stream.antena1.com.br/stream12"
+  },
+  {
+    "name": "Antena 1 HD",
+    "genre": "Adult Contemporary",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18103,
+    "source": "https://stream.antena1.com.br/stream20"
+  },
+  {
+    "name": "Antena 1 Espacial",
+    "genre": "Ambient",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18104,
+    "source": "https://streams.radiomast.io/7c9dfc6c-917a-4500-8496-d687128c23b5"
+  },
+  {
+    "name": "Jovem Pan FM",
+    "genre": "Pop",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18105,
+    "source": "https://stream.zeno.fm/c45wbq2us3buv"
+  },
+  {
+    "name": "Jovem Pan News",
+    "genre": "Talk and News",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18106,
+    "source": "https://stream.zeno.fm/vlcraijc6yiuv"
+  },
+  {
+    "name": "Classic Pan",
+    "genre": "Classic Hits",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18107,
+    "source": "https://stream.zeno.fm/rtk4pzcome3vv"
+  },
+  {
+    "name": "Novabrasil SP",
+    "genre": "MPB",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18108,
+    "source": "http://playerservices.streamtheworld.com/api/livestream-redirect/NOVABRASIL_SP.mp3"
+  },
+  {
+    "name": "Mix FM SP",
+    "genre": "Pop",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18109,
+    "source": "http://playerservices.streamtheworld.com/api/livestream-redirect/MIXFM_SAOPAULO.mp3"
+  },
+  {
+    "name": "Energia 97",
+    "genre": "Electronic",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18110,
+    "source": "https://streaming.inweb.com.br/energia"
+  },
+  {
+    "name": "Transamerica SP",
+    "genre": "Pop",
+    "language": "PTB",
+    "bitrate": 128,
+    "port": 18111,
+    "source": "https://playerservices.streamtheworld.com/api/livestream-redirect/RT_SPAAC.aac"
+  },
+  {
+    "name": "NPO Radio 1",
+    "genre": "Talk",
+    "language": "NL",
+    "bitrate": 192,
+    "port": 18112,
+    "source": "https://icecast.omroep.nl/radio1-bb-mp3"
+  },
+  {
+    "name": "VRT Radio 2",
+    "genre": "Pop",
+    "language": "BE",
+    "bitrate": 128,
+    "port": 18113,
+    "source": "https://vrt.streamabc.net/vrt-radio2antwerpen-mp3-128-8732799"
+  },
+  {
+    "name": "R\\xc3\\xa1dio Beat",
+    "genre": "Classic Rock",
+    "language": "CZ",
+    "bitrate": 128,
+    "port": 18114,
+    "source": "http://icecast5.play.cz/radiobeat128.mp3"
+  },
+  {
+    "name": "Country Radio",
+    "genre": "Country",
+    "language": "CZ",
+    "bitrate": 64,
+    "port": 18115,
+    "source": "http://icecast2.play.cz:8000/country64.mp3"
+  },
+  {
+    "name": "Radio 100",
+    "genre": "Adult Contemporary",
+    "language": "DK",
+    "bitrate": 128,
+    "port": 18116,
+    "source": "https://live-bauerdk.sharp-stream.com/radio100_dk_mp3"
+  },
+  {
+    "name": "Raadio 2",
+    "genre": "Pop",
+    "language": "EE",
+    "bitrate": 128,
+    "port": 18117,
+    "source": "http://icecast.err.ee:80/raadio2.mp3"
+  },
+  {
+    "name": "NRJ Energy Paris",
+    "genre": "Pop",
+    "language": "FR",
+    "bitrate": 128,
+    "port": 18118,
+    "source": "http://185.52.127.155/fr/30001/mp3_128.mp3?origine=fluxradios"
+  },
+  {
+    "name": "Skyrock",
+    "genre": "Rock",
+    "language": "FR",
+    "bitrate": 128,
+    "port": 18119,
+    "source": "http://icecast.skyrock.net/s/natio_mp3_128k"
+  },
+  {
+    "name": "House Heads UK",
+    "genre": "House",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18120,
+    "source": "http://s36.myradiostream.com:13028/;listen.mp3"
+  },
+  {
+    "name": "Radio 538",
+    "genre": "Pop",
+    "language": "NL",
+    "bitrate": 128,
+    "port": 18121,
+    "source": "https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3"
+  },
+  {
+    "name": "100% NL",
+    "genre": "Pop",
+    "language": "NL",
+    "bitrate": 128,
+    "port": 18122,
+    "source": "http://stream.100p.nl/100pctnl.mp3"
+  },
+  {
+    "name": "Radio NL",
+    "genre": "Dutch Schlager",
+    "language": "NL",
+    "bitrate": 192,
+    "port": 18123,
+    "source": "https://stream.radionl.fm/rnlhoogeveen"
+  },
+  {
+    "name": "NRK P1 Hordaland",
+    "genre": "Variety",
+    "language": "NO",
+    "bitrate": 192,
+    "port": 18124,
+    "source": "https://lyd.nrk.no/nrk_radio_p1_hordaland_mp3_h"
+  },
+  {
+    "name": "Radio Kaszebe",
+    "genre": "Classical",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18125,
+    "source": "http://stream3.nadaje.com:8048/;0872561763972044stream.nsv"
+  },
+  {
+    "name": "Polskie Radio - Katowice",
+    "genre": "Local",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18126,
+    "source": "http://stream4.nadaje.com:9212/radiokatowice"
+  },
+  {
+    "name": "RMF FM",
+    "genre": "Pop",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18127,
+    "source": "http://217.74.72.11:8000/rmf_fm"
+  },
+  {
+    "name": "RMF MAXXX",
+    "genre": "Electronic",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18128,
+    "source": "http://217.74.72.10:8000/rmf_maxxx"
+  },
+  {
+    "name": "RMF Classic",
+    "genre": "Classical",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18129,
+    "source": "http://217.74.72.10:8000/rmf_classic"
+  },
+  {
+    "name": "DR P8 Jazz",
+    "genre": "Jazz",
+    "language": "DK",
+    "bitrate": 192,
+    "port": 18130,
+    "source": "http://live-icy.gss.dr.dk/A/A22H.mp3"
+  },
+  {
+    "name": "RMF Alternatywa",
+    "genre": "Alternative Rock",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18131,
+    "source": "http://217.74.72.11:8000/rmf_alternatywa"
+  },
+  {
+    "name": "Radio SLR",
+    "genre": "Variety",
+    "language": "DK",
+    "bitrate": 128,
+    "port": 18132,
+    "source": "http://stream.wlmm.dk/stream/54/"
+  },
+  {
+    "name": "myROCK",
+    "genre": "Rock",
+    "language": "DK",
+    "bitrate": 128,
+    "port": 18133,
+    "source": "http://stream.myrock.fm/myrock128"
+  },
+  {
+    "name": "Pop FM",
+    "genre": "Pop",
+    "language": "DK",
+    "bitrate": 128,
+    "port": 18134,
+    "source": "http://stream.popfm.dk/pop128"
+  },
+  {
+    "name": "Retro Radio",
+    "genre": "Oldies",
+    "language": "DK",
+    "bitrate": 192,
+    "port": 18135,
+    "source": "http://streammp3.retro-radio.dk/retro-mp3"
+  },
+  {
+    "name": "Austrian Rock Radio",
+    "genre": "Rock",
+    "language": "AT",
+    "bitrate": 128,
+    "port": 18136,
+    "source": "http://live.antenne.at/arr"
+  },
+  {
+    "name": "Arabel FM",
+    "genre": "Variety",
+    "language": "BE",
+    "bitrate": 128,
+    "port": 18137,
+    "source": "http://arabelfm.ice.infomaniak.ch/arabelprodcastfm.mp3"
+  },
+  {
+    "name": "Radio Contact",
+    "genre": "Adult Contemporary",
+    "language": "BE",
+    "bitrate": 192,
+    "port": 18138,
+    "source": "https://radiocontact.ice.infomaniak.ch/radiocontact-mp3-192.mp3"
+  },
+  {
+    "name": "Proton FM",
+    "genre": "Local",
+    "language": "AT",
+    "bitrate": 256,
+    "port": 18139,
+    "source": "http://www.radioproton.at:8000/proton"
+  },
+  {
+    "name": "S\\xc3\\xbcdtirol 1",
+    "genre": "Pop",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18140,
+    "source": "http://str2.creacast.com/sudtirol1a"
+  },
+  {
+    "name": "Oldie Party Austria",
+    "genre": "Oldies",
+    "language": "AT",
+    "bitrate": 128,
+    "port": 18141,
+    "source": "http://rs2.myradio24.de:8410/stream"
+  },
+  {
+    "name": "Polskie Radio - Szczecin",
+    "genre": "Local",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18142,
+    "source": "http://stream4.nadaje.com:11986/prs"
+  },
+  {
+    "name": "Tok FM",
+    "genre": "Spoken",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18143,
+    "source": "http://wroclaw.radio.pionier.net.pl:8000/pl/tuba10-1.mp3"
+  },
+  {
+    "name": "Radio Parada",
+    "genre": "Local",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18144,
+    "source": "http://stream4.nadaje.com:15274/live"
+  },
+  {
+    "name": "Radio Orbit",
+    "genre": "Alternative Rock",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18145,
+    "source": "http://s1.slotex.pl:7390/stream/1/"
+  },
+  {
+    "name": "Radio Forever 80s",
+    "genre": "Retro",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18146,
+    "source": "http://sirius.shoutca.st:8761/1"
+  },
+  {
+    "name": "Radio MRS",
+    "genre": "Electronic",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18147,
+    "source": "http://play.radiomrs.com:7494/;stream.nsv"
+  },
+  {
+    "name": "Radio Baobab",
+    "genre": "Blues",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18148,
+    "source": "http://stream.radiobaobab.pl:8000/radiobaobab.mp3"
+  },
+  {
+    "name": "Polskie Radio PiK",
+    "genre": "Adult Contemporary",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18149,
+    "source": "http://stream.radiopik.pl:9004/"
+  },
+  {
+    "name": "Fun R\\xc3\\xa1dio",
+    "genre": "Pop",
+    "language": "SK",
+    "bitrate": 256,
+    "port": 18150,
+    "source": "https://stream.funradio.sk:8000/funpgm256.mp3"
+  },
+  {
+    "name": "R\\xc3\\xa1dio Viva",
+    "genre": "Pop",
+    "language": "SK",
+    "bitrate": 320,
+    "port": 18151,
+    "source": "https://stream.sepia.sk:8000/viva320.mp3"
+  },
+  {
+    "name": "SRo 2 R\\xc3\\xa1dio Regina Bansk\\xc3\\xa1 Bystrica",
+    "genre": "Spoken",
+    "language": "SK",
+    "bitrate": 128,
+    "port": 18152,
+    "source": "http://live.slovakradio.sk:8000/Regina_BB_128.mp3"
+  },
+  {
+    "name": "RAI Radio 4 Light",
+    "genre": "Rock",
+    "language": "IT",
+    "bitrate": 256,
+    "port": 18153,
+    "source": "http://icestreaming.rai.it/4.mp3"
+  },
+  {
+    "name": "Studio B",
+    "genre": "Pop",
+    "language": "RS",
+    "bitrate": 128,
+    "port": 18154,
+    "source": "http://radio.studiob.rs:8004/"
+  },
+  {
+    "name": "RTL Radio L\\xc3\\xabtzebuerg",
+    "genre": "Variety",
+    "language": "LU",
+    "bitrate": 256,
+    "port": 18155,
+    "source": "http://live.newmedia.lu/"
+  },
+  {
+    "name": "Beograd 202",
+    "genre": "Spoken",
+    "language": "RS",
+    "bitrate": 128,
+    "port": 18156,
+    "source": "http://www.radiobeograd.rs/download/radio202/dnevnik/dnevnik202.mp3"
+  },
+  {
+    "name": "Radio Sorrriso",
+    "genre": "Variety",
+    "language": "IT",
+    "bitrate": 128,
+    "port": 18157,
+    "source": "http://wma02.fluidstream.net:2250/;"
+  },
+  {
+    "name": "Rock FM",
+    "genre": "Rock",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18158,
+    "source": "http://5.20.223.18/crf128.mp3"
+  },
+  {
+    "name": "Jazz London Radio",
+    "genre": "Jazz",
+    "language": "EN",
+    "bitrate": 256,
+    "port": 18159,
+    "source": "http://radio.canstream.co.uk:8075/live.mp3"
+  },
+  {
+    "name": "Hit Radio FFH - Rock",
+    "genre": "Rock",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18160,
+    "source": "http://mp3.ffh.de/ffhchannels/hqrock.mp3"
+  },
+  {
+    "name": "Smooth Radio",
+    "genre": "Adult Contemporary",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18161,
+    "source": "http://media-ice.musicradio.com/SmoothLondonMP3"
+  },
+  {
+    "name": "EldoRadio Luxembourg",
+    "genre": "Pop",
+    "language": "INT",
+    "bitrate": 128,
+    "port": 18162,
+    "source": "http://sc-eldolive.newmedia.lu/;stream.nvs"
+  },
+  {
+    "name": "RauteMusik.FM - Rock",
+    "genre": "Indie Rock",
+    "language": "DE",
+    "bitrate": 192,
+    "port": 18163,
+    "source": "http://rock-high.rautemusik.fm/Musik.Rock"
+  },
+  {
+    "name": "Direct FM",
+    "genre": "Variety",
+    "language": "FR",
+    "bitrate": 128,
+    "port": 18164,
+    "source": "http://directfm.ice.infomaniak.ch/directfm-128.mp3"
+  },
+  {
+    "name": "Radio Caroline",
+    "genre": "Rock",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18165,
+    "source": "http://sc8.radiocaroline.net:8040/"
+  },
+  {
+    "name": "Oui FM",
+    "genre": "Rock",
+    "language": "FR",
+    "bitrate": 192,
+    "port": 18166,
+    "source": "http://icepe11.infomaniak.ch/ouifm-high.mp3"
+  },
+  {
+    "name": "Rock Zone",
+    "genre": "Rock",
+    "language": "CZ",
+    "bitrate": 128,
+    "port": 18167,
+    "source": "http://icecast5.play.cz/rockzone128.mp3"
+  },
+  {
+    "name": "LBC",
+    "genre": "Talk",
+    "language": "EN",
+    "bitrate": 48,
+    "port": 18168,
+    "source": "http://ice-the.musicradio.com:80/LBC973MP3Low"
+  },
+  {
+    "name": "Top Music - Strasbourg",
+    "genre": "Pop",
+    "language": "FR",
+    "bitrate": 128,
+    "port": 18169,
+    "source": "http://str0.creacast.com/topmusic1"
+  },
+  {
+    "name": "Die Neue 107.7",
+    "genre": "Pop, Rock",
+    "language": "DE",
+    "bitrate": 192,
+    "port": 18170,
+    "source": "http://dieneue1077.cast.addradio.de/dieneue1077/rock/high/stream.mp3"
+  },
+  {
+    "name": "1.FM - Country One",
+    "genre": "Country",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18171,
+    "source": "http://strm112.1.fm/country_mobile_mp3"
+  },
+  {
+    "name": "181.FM - 90's Country",
+    "genre": "90s",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18172,
+    "source": "http://relay.181.fm:8050"
+  },
+  {
+    "name": "181.FM - Highway 181",
+    "genre": "Country",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18173,
+    "source": "http://relay.181.fm:8018"
+  },
+  {
+    "name": "181.FM - Kickin' Country",
+    "genre": "Country",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18174,
+    "source": "http://relay.181.fm:8130"
+  },
+  {
+    "name": "181.FM - Real Country",
+    "genre": "Country",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18175,
+    "source": "http://relay.181.fm:8034"
+  },
+  {
+    "name": "181.FM - The Front Porch",
+    "genre": "Bluegrass",
+    "language": "EN",
+    "bitrate": 64,
+    "port": 18176,
+    "source": "http://relay.181.fm:8016"
+  },
+  {
+    "name": "NPO 3 FM",
+    "genre": "Pop",
+    "language": "NL",
+    "bitrate": 192,
+    "port": 18177,
+    "source": "https://icecast.omroep.nl/3fm-bb-mp3"
+  },
+  {
+    "name": "Radio Ultra (\\xd0\\xa0\\xd0\\xb0\\xd0\\xb4\\xd0\\xb8\\xd0\\xbe \\xd0\\xa3\\xd0\\xbb\\xd1\\x8c\\xd1\\x82\\xd1\\x80\\xd0\\xb0)",
+    "genre": "Rock",
+    "language": "RU",
+    "bitrate": 128,
+    "port": 18178,
+    "source": "http://nashe1.hostingradio.ru/ultra-128.mp3"
+  },
+  {
+    "name": "Real Radio XS Manchester",
+    "genre": "Classic Rock",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18179,
+    "source": "http://ice-the.musicradio.com:80/RealXSManchesterMP3"
+  },
+  {
+    "name": "R\\xc3\\xa1dio Impuls",
+    "genre": "Adult Contemporary",
+    "language": "CZ",
+    "bitrate": 128,
+    "port": 18180,
+    "source": "http://icecast5.play.cz:8000/impuls128.mp3"
+  },
+  {
+    "name": "Kiss Ji\\xc5\\xben\\xc3\\xad \\xc4\\x8cechy",
+    "genre": "Top 40",
+    "language": "CZ",
+    "bitrate": 128,
+    "port": 18181,
+    "source": "http://icecast8.play.cz/kisspublikum128.mp3"
+  },
+  {
+    "name": "Hitr\\xc3\\xa1dio - Faktor",
+    "genre": "Pop",
+    "language": "CZ",
+    "bitrate": 128,
+    "port": 18182,
+    "source": "http://ice.abradio.cz/faktor128.mp3"
+  },
+  {
+    "name": "Fajn Radio",
+    "genre": "Top 40",
+    "language": "CZ",
+    "bitrate": 128,
+    "port": 18183,
+    "source": "http://ice.abradio.cz/fajn128.mp3"
+  },
+  {
+    "name": "\\xc4\\x8cRo 1 Radio\\xc5\\xbeurn\\xc3\\xa1l",
+    "genre": "News, Talk",
+    "language": "CZ",
+    "bitrate": 128,
+    "port": 18184,
+    "source": "http://icecast8.play.cz/cro1-128.mp3"
+  },
+  {
+    "name": "Love FM",
+    "genre": "Pop",
+    "language": "IT",
+    "bitrate": 320,
+    "port": 18185,
+    "source": "https://ice07.fluidstream.net/lovefm.mp3"
+  },
+  {
+    "name": "NRK Alltid Nyheter",
+    "genre": "News",
+    "language": "NO",
+    "bitrate": 192,
+    "port": 18186,
+    "source": "https://lyd.nrk.no/nrk_radio_alltid_nyheter_mp3_h"
+  },
+  {
+    "name": "NRK Klassisk",
+    "genre": "Classical",
+    "language": "NO",
+    "bitrate": 192,
+    "port": 18187,
+    "source": "http://lyd.nrk.no/nrk_radio_klassisk_mp3_h"
+  },
+  {
+    "name": "NRK Jazz",
+    "genre": "Jazz",
+    "language": "NO",
+    "bitrate": 192,
+    "port": 18188,
+    "source": "https://lyd.nrk.no/nrk_radio_jazz_mp3_h"
+  },
+  {
+    "name": "NRK P1 \\xc3\\x98stlandssendingen",
+    "genre": "Oldies",
+    "language": "NO",
+    "bitrate": 192,
+    "port": 18189,
+    "source": "https://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3_h"
+  },
+  {
+    "name": "NRK P2",
+    "genre": "Talk",
+    "language": "NO",
+    "bitrate": 192,
+    "port": 18190,
+    "source": "https://lyd.nrk.no/nrk_radio_p2_mp3_h"
+  },
+  {
+    "name": "NRK mP3",
+    "genre": "Hip Hop, Electro",
+    "language": "NO",
+    "bitrate": 192,
+    "port": 18191,
+    "source": "http://lyd.nrk.no/nrk_radio_mp3_mp3_h"
+  },
+  {
+    "name": "DR P1",
+    "genre": "News",
+    "language": "DK",
+    "bitrate": 192,
+    "port": 18192,
+    "source": "http://live-icy.gss.dr.dk:8000/A/A03H.mp3"
+  },
+  {
+    "name": "DR P2",
+    "genre": "Classical",
+    "language": "DK",
+    "bitrate": 320,
+    "port": 18193,
+    "source": "http://live-icy.gss.dr.dk:8000/A/A04H.mp3"
+  },
+  {
+    "name": "DR P3",
+    "genre": "Top 40",
+    "language": "DK",
+    "bitrate": 192,
+    "port": 18194,
+    "source": "http://live-icy.gss.dr.dk:8000/A/A05H.mp3"
+  },
+  {
+    "name": "DR P4 K\\xc3\\xb8benhavn",
+    "genre": "Variety",
+    "language": "DK",
+    "bitrate": 192,
+    "port": 18195,
+    "source": "http://live-icy.gss.dr.dk:8000/A/A08H.mp3"
+  },
+  {
+    "name": "DR P5",
+    "genre": "Variety",
+    "language": "DK",
+    "bitrate": 192,
+    "port": 18196,
+    "source": "http://live-icy.gss.dr.dk:8000/A/A25H.mp3"
+  },
+  {
+    "name": "DR P6 Beat",
+    "genre": "Variety",
+    "language": "DK",
+    "bitrate": 192,
+    "port": 18197,
+    "source": "http://live-icy.gss.dr.dk:8000/A/A29H.mp3"
+  },
+  {
+    "name": "Radio Rock",
+    "genre": "Rock",
+    "language": "NO",
+    "bitrate": 128,
+    "port": 18198,
+    "source": "http://edge-bauerno-03-gos2.sharp-stream.com/radiorock_no_mp3?"
+  },
+  {
+    "name": "The Voice",
+    "genre": "Pop",
+    "language": "DK",
+    "bitrate": 128,
+    "port": 18199,
+    "source": "https://live-bauerdk.sharp-stream.com/thevoice_dk_mp3"
+  },
+  {
+    "name": "Radio Bloodstream",
+    "genre": "Rock",
+    "language": "EN",
+    "bitrate": 144,
+    "port": 18200,
+    "source": "http://uk1.internet-radio.com/proxy/bloodstream?mp=/stream"
+  },
+  {
+    "name": "Radio LRB",
+    "genre": "Adult Contemporary",
+    "language": "LU",
+    "bitrate": 192,
+    "port": 18201,
+    "source": "http://zeus.lrb.lu:8000/lrb.live"
+  },
+  {
+    "name": "Radio Diddel\\xc3\\xa9ng",
+    "genre": "Variety",
+    "language": "LU",
+    "bitrate": 128,
+    "port": 18202,
+    "source": "http://radiodudelange.ice.infomaniak.ch/radiodudelange-128.mp3"
+  },
+  {
+    "name": "Country Rocks Radio",
+    "genre": "Various",
+    "language": "SE",
+    "bitrate": 128,
+    "port": 18203,
+    "source": "http://stream.dbmedia.se/crrMP3"
+  },
+  {
+    "name": "ERR Raadio 2",
+    "genre": "Various",
+    "language": "EE",
+    "bitrate": 128,
+    "port": 18204,
+    "source": "http://icecast.err.ee/raadio2.mp3"
+  },
+  {
+    "name": "Raadio 4",
+    "genre": "Various",
+    "language": "EE",
+    "bitrate": 128,
+    "port": 18205,
+    "source": "http://icecast.err.ee/raadio4madal.mp3"
+  },
+  {
+    "name": "Radijo Stotis P\\xc5\\xabkas",
+    "genre": "Folk, Pop",
+    "language": "LV",
+    "bitrate": 192,
+    "port": 18206,
+    "source": "http://82.135.234.195:8000/pukas.mp3"
+  },
+  {
+    "name": "Latgolys Radeja",
+    "genre": "Local",
+    "language": "LV",
+    "bitrate": 128,
+    "port": 18207,
+    "source": "http://195.13.253.51:8000/128_mp3"
+  },
+  {
+    "name": "RUSRADIO LT",
+    "genre": "Pop",
+    "language": "LT",
+    "bitrate": 128,
+    "port": 18208,
+    "source": "http://5.20.223.18/rrb128.mp3"
+  },
+  {
+    "name": "Relax FM",
+    "genre": "Pop",
+    "language": "LT",
+    "bitrate": 128,
+    "port": 18209,
+    "source": "http://5.20.223.18/relaxfm128.mp3"
+  },
+  {
+    "name": "\\xc5\\xbdini\\xc5\\xb3 radijas",
+    "genre": "Spoken",
+    "language": "LT",
+    "bitrate": 256,
+    "port": 18210,
+    "source": "http://netradio.ziniur.lt/ziniur.mp3"
+  },
+  {
+    "name": "Smooth Chill",
+    "genre": "Chill",
+    "language": "EN",
+    "bitrate": 128,
+    "port": 18211,
+    "source": "http://media-sov.musicradio.com/ChillMP3"
+  },
+  {
+    "name": "Easy FM",
+    "genre": "Jazz",
+    "language": "LT",
+    "bitrate": 256,
+    "port": 18212,
+    "source": "http://netradio.ziniur.lt/easyfm.mp3"
+  },
+  {
+    "name": "Mano FM",
+    "genre": "Pop",
+    "language": "LT",
+    "bitrate": 128,
+    "port": 18213,
+    "source": "http://stream.manofm.lt/listen?"
+  },
+  {
+    "name": "Radio Hear",
+    "genre": "Adult Contemporary",
+    "language": "FI",
+    "bitrate": 320,
+    "port": 18214,
+    "source": "http://hear.fi:8000/hear.mp3"
+  },
+  {
+    "name": "Retro FM (\\xd0\\xa0\\xd0\\xb5\\xd1\\x82\\xd1\\x80\\xd0\\xbe FM)",
+    "genre": "Retro",
+    "language": "RU",
+    "bitrate": 256,
+    "port": 18215,
+    "source": "http://retroserver.streamr.ru:8043/retro256.mp3"
+  },
+  {
+    "name": "Russian Songs (\\xd0\\xa0\\xd1\\x83\\xd1\\x81\\xd1\\x81\\xd0\\xba\\xd0\\xb8\\xd0\\xb5 \\xd0\\xbf\\xd0\\xb5\\xd1\\x81\\xd0\\xbd\\xd0\\xb8)",
+    "genre": "Pop",
+    "language": "RU",
+    "bitrate": 128,
+    "port": 18216,
+    "source": "http://listen.rusongs.ru:8005/ru-mp3-128"
+  },
+  {
+    "name": "TruckStopRadio",
+    "genre": "Sim radio",
+    "language": "EN",
+    "bitrate": 320,
+    "port": 18217,
+    "source": "https://oreo.truckstopradio.co.uk/radio/8000/radio.mp3"
+  },
+  {
+    "name": "Pirate Rock",
+    "genre": "Rock",
+    "language": "SE",
+    "bitrate": 192,
+    "port": 18218,
+    "source": "https://stream.piraterock.se:8101/webradio"
+  },
+  {
+    "name": "Vinyl FM",
+    "genre": "60s, 70s, 80s",
+    "language": "SE",
+    "bitrate": 128,
+    "port": 18219,
+    "source": "https://tx-bauerse.sharp-stream.com/http_live.php?i=vinylfm_instream_se_mp3"
+  },
+  {
+    "name": "NRJ Sverige",
+    "genre": "Pop",
+    "language": "SE",
+    "bitrate": 96,
+    "port": 18220,
+    "source": "http://edge-bauerse-03-gos2.sharp-stream.com/nrj_instreamtest_se_mp3?"
+  },
+  {
+    "name": "Radio FSSPX",
+    "genre": "Christian",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18221,
+    "source": "http://radio.fsspx.pl:8000/radio.mp3"
+  },
+  {
+    "name": "Rock Radio",
+    "genre": "Rock",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18222,
+    "source": "http://radiostream.pl/tuba8-1.mp3"
+  },
+  {
+    "name": "Radio PLUS",
+    "genre": "Adult Contemporary",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18223,
+    "source": "https://ic2.smcdn.pl/4100-1.mp3"
+  },
+  {
+    "name": "MUZO.FM",
+    "genre": "Rock, Pop",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18224,
+    "source": "http://n11a-eu.rcs.revma.com/1nnezw8qz7zuv"
+  },
+  {
+    "name": "VOX FM",
+    "genre": "Dance",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18225,
+    "source": "https://ic2.smcdn.pl/3990-1.mp3"
+  },
+  {
+    "name": "ESKA Warszawa",
+    "genre": "Pop",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18226,
+    "source": "https://ic1.smcdn.pl/2380-1.mp3"
+  },
+  {
+    "name": "RMF Hip Hop",
+    "genre": "Hip Hop",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18227,
+    "source": "http://rmfstream1.interia.pl:8000/rmf_hip_hop"
+  },
+  {
+    "name": "RMF 2000",
+    "genre": "2000s",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18228,
+    "source": "http://rs6-krk2.rmfstream.pl/rmf_2000"
+  },
+  {
+    "name": "RMF 10s",
+    "genre": "2010s",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18229,
+    "source": "http://rs6-krk2.rmfstream.pl/rmf_2010"
+  },
+  {
+    "name": "RMF 50s",
+    "genre": "50s",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18230,
+    "source": "http://217.74.72.10:8000/rmf_50s"
+  },
+  {
+    "name": "RMF 60s",
+    "genre": "60s",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18231,
+    "source": "http://217.74.72.10:8000/rmf_60s"
+  },
+  {
+    "name": "RMF 70s",
+    "genre": "70s",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18232,
+    "source": "http://217.74.72.10:8000/rmf_70s"
+  },
+  {
+    "name": "RMF 80s",
+    "genre": "80s",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18233,
+    "source": "http://217.74.72.10:8000/rmf_80s"
+  },
+  {
+    "name": "RMF 90s",
+    "genre": "90s",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18234,
+    "source": "http://217.74.72.10:8000/rmf_90s"
+  },
+  {
+    "name": "RMF24",
+    "genre": "News",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18235,
+    "source": "http://217.74.72.11:8000/rmf_24"
+  },
+  {
+    "name": "Polskie Radio - Dzieciom",
+    "genre": "Children",
+    "language": "PL",
+    "bitrate": 192,
+    "port": 18236,
+    "source": "http://mp3.polskieradio.pl:8916/;"
+  },
+  {
+    "name": "Polskie Radio - 24",
+    "genre": "News",
+    "language": "PL",
+    "bitrate": 192,
+    "port": 18237,
+    "source": "http://mp3.polskieradio.pl:8080/;"
+  },
+  {
+    "name": "Polskie Radio - Kierowc\\xc3\\xb3w",
+    "genre": "Easy listening",
+    "language": "PL",
+    "bitrate": 192,
+    "port": 18238,
+    "source": "http://mp3.polskieradio.pl:8918/;"
+  },
+  {
+    "name": "Polskie Radio - Czw\\xc3\\xb3rka",
+    "genre": "Pop",
+    "language": "PL",
+    "bitrate": 192,
+    "port": 18239,
+    "source": "http://mp3.polskieradio.pl:8906/;"
+  },
+  {
+    "name": "Polskie Radio - Tr\\xc3\\xb3jka",
+    "genre": "Pop",
+    "language": "PL",
+    "bitrate": 192,
+    "port": 18240,
+    "source": "http://mp3.polskieradio.pl:8904/;"
+  },
+  {
+    "name": "Polskie Radio - Dw\\xc3\\xb3jka",
+    "genre": "Classical",
+    "language": "PL",
+    "bitrate": 192,
+    "port": 18241,
+    "source": "http://mp3.polskieradio.pl:8902/;"
+  },
+  {
+    "name": "Polskie Radio - Jedynka",
+    "genre": "Easy listening",
+    "language": "PL",
+    "bitrate": 192,
+    "port": 18242,
+    "source": "http://mp3.polskieradio.pl:8900/;"
+  },
+  {
+    "name": "Radio Bollerwagen",
+    "genre": "Variety",
+    "language": "DE",
+    "bitrate": 192,
+    "port": 18243,
+    "source": "https://stream.ffn.de/radiobollerwagen/mp3-192"
+  },
+  {
+    "name": "Antenne Bayern",
+    "genre": "Pop",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18244,
+    "source": "https://s6-webradio.antenne.de/antenne"
+  },
+  {
+    "name": "SWR 3",
+    "genre": "News, Pop",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18245,
+    "source": "https://dispatcher.rndfnk.com/swr/swr3/live/mp3/128/stream.mp3"
+  },
+  {
+    "name": "Deutschlandfunk",
+    "genre": "Talk",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18246,
+    "source": "https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3?aggregator=onlineradiobox-com"
+  },
+  {
+    "name": "WDR 1LIVE",
+    "genre": "Pop, Rock",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18247,
+    "source": "http://wdr-1live-live.icecastssl.wdr.de/wdr/1live/live/mp3/128/stream.mp3?aggregator=onlineradiobox-com"
+  },
+  {
+    "name": "80s80s",
+    "genre": "80s",
+    "language": "DE",
+    "bitrate": 192,
+    "port": 18248,
+    "source": "https://streams.80s80s.de/web/mp3-192"
+  },
+  {
+    "name": "Radio Paloma",
+    "genre": "Pop, Folk",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18249,
+    "source": "https://stream.silvacast.com/RPLive/mp3-128/onlineradiobox_net/"
+  },
+  {
+    "name": "Sunshine Live",
+    "genre": "Dance, Techno",
+    "language": "DE",
+    "bitrate": 192,
+    "port": 18250,
+    "source": "https://stream.sunshine-live.de/hq/mp3-192"
+  },
+  {
+    "name": "90s90s",
+    "genre": "90s",
+    "language": "DE",
+    "bitrate": 192,
+    "port": 18251,
+    "source": "https://streams.90s90s.de/pop/mp3-192"
+  },
+  {
+    "name": "N-Joy",
+    "genre": "Dance, Pop",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18252,
+    "source": "https://icecast.ndr.de/ndr/njoy/live/mp3/128/stream.mp3?aggregator=onlineradiobox-com"
+  },
+  {
+    "name": "BR24",
+    "genre": "News",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18253,
+    "source": "https://dispatcher.rndfnk.com/br/br24/live/mp3/mid?aggregator=onlineradiobox-com"
+  },
+  {
+    "name": "Schlagerparadies",
+    "genre": "German Schlager",
+    "language": "DE",
+    "bitrate": 128,
+    "port": 18254,
+    "source": "http://server.rmnradio.de:30842/"
+  },
+  {
+    "name": "Radio FFN",
+    "genre": "News, Pop",
+    "language": "DE",
+    "bitrate": 192,
+    "port": 18255,
+    "source": "https://stream.ffn.de/ffn/mp3-192/stream.mp3"
+  },
+  {
+    "name": "Radio Freee",
+    "genre": "Alternative",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18256,
+    "source": "http://streaming.radio.lublin.pl:8000/radiofreee"
+  },
+  {
+    "name": "Radio Zet Party",
+    "genre": "Dance",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18257,
+    "source": "http://zt04.cdn.eurozet.pl/ZETPAR.mp3"
+  },
+  {
+    "name": "Radio 357",
+    "genre": "Various",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18258,
+    "source": "https://stream.rcs.revma.com/an1ugyygzk8uv"
+  },
+  {
+    "name": "Radio Nowy \\xc5\\x9awiat",
+    "genre": "Variety",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18259,
+    "source": "http://stream.rcs.revma.com/ypqt40u0x1zuv"
+  },
+  {
+    "name": "Radio Z\\xc5\\x82ote Przeboje",
+    "genre": "Oldies",
+    "language": "PL",
+    "bitrate": 128,
+    "port": 18260,
+    "source": "http://poznan5-6.radio.pionier.net.pl:8000/tuba9-1.mp3"
+  },
+  {
+    "name": "Radio Aktual",
+    "genre": "Pop, News, Folk",
+    "language": "SL",
+    "bitrate": 128,
+    "port": 18261,
+    "source": "https://live.radio.si/Aktual"
+  },
+  {
+    "name": "Radio 1 SL",
+    "genre": "Rock, Pop, News",
+    "language": "SL",
+    "bitrate": 128,
+    "port": 18262,
+    "source": "http://live3.infonetmedia.si/Radio1"
+  },
+  {
+    "name": "Veseljak",
+    "genre": "Pop, News, Folk",
+    "language": "SL",
+    "bitrate": 128,
+    "port": 18263,
+    "source": "https://live.radio.si/Veseljak"
+  },
+  {
+    "name": "Hitradio Center",
+    "genre": "Dance, Rock, R&B",
+    "language": "SL",
+    "bitrate": 128,
+    "port": 18264,
+    "source": "http://stream2.radiocenter.si:8000/;stream/1"
+  },
+  {
+    "name": "Best FM",
+    "genre": "Folk, Pop, Dance",
+    "language": "SL",
+    "bitrate": 128,
+    "port": 18265,
+    "source": "https://live.radio.si/BestFM"
+  },
+  {
+    "name": "Radio Antena",
+    "genre": "Dance, Rock, Pop",
+    "language": "SL",
+    "bitrate": 128,
+    "port": 18266,
+    "source": "http://live1.radioantena.si/Antena"
+  },
+  {
+    "name": "Radio Capris",
+    "genre": "Rock, Pop, News",
+    "language": "SL",
+    "bitrate": 128,
+    "port": 18267,
+    "source": "https://stream.exit.si/live"
+  },
+  {
+    "name": "Radio Rogla",
+    "genre": "Rock, Pop, Oldies",
+    "language": "SL",
+    "bitrate": 128,
+    "port": 18268,
+    "source": "http://193.105.67.24:8010/;stream.nsv"
+  },
+  {
+    "name": "Radio Salomon",
+    "genre": "Dance, Pop",
+    "language": "SL",
+    "bitrate": 128,
+    "port": 18269,
+    "source": "https://live.radio.si/Salomon"
+  },
+  {
+    "name": "Folk Radio Kneginec",
+    "genre": "Pop, Folk",
+    "language": "HR",
+    "bitrate": 128,
+    "port": 18270,
+    "source": "https://stream.zeno.fm/yetzdv442k8uv"
+  },
+  {
+    "name": "Tambura\\xc5\\xa1ki Radio",
+    "genre": "Pop",
+    "language": "HR",
+    "bitrate": 128,
+    "port": 18271,
+    "source": "https://listen.radioking.com/radio/552965/stream/612287"
+  },
+  {
+    "name": "Super Radio",
+    "genre": "Pop, Folk, News",
+    "language": "HR",
+    "bitrate": 128,
+    "port": 18272,
+    "source": "https://mcp1.mydataknox.com:8010/stream"
+  },
+  {
+    "name": "Radio Nova Gradiska",
+    "genre": "Pop, Talk",
+    "language": "HR",
+    "bitrate": 128,
+    "port": 18273,
+    "source": "http://comet.shoutca.st:8050/stream"
+  },
+  {
+    "name": "Cool Radio",
+    "genre": "Pop, Folk",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18274,
+    "source": "https://live.coolradio.rs/cool128"
+  },
+  {
+    "name": "Radio Karolina",
+    "genre": "Pop, Folk, Talk",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18275,
+    "source": "https://streaming.karolina.rs/karolina.mp3"
+  },
+  {
+    "name": "HIT FM",
+    "genre": "Pop, Folk",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18276,
+    "source": "https://streaming.hitfm.rs/hit.mp3"
+  },
+  {
+    "name": "Pink Radio",
+    "genre": "Pop",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18277,
+    "source": "http://pink.exyuserver.com/;"
+  },
+  {
+    "name": "Radio Jat",
+    "genre": "Pop, News",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18278,
+    "source": "https://streaming.radiojat.rs/radiojat.mp3"
+  },
+  {
+    "name": "Radio WTF",
+    "genre": "Dance, Electronic",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18279,
+    "source": "https://live.wtfradio.rs/wtfradio.mp3"
+  },
+  {
+    "name": "Radio Mix",
+    "genre": "Rock, Pop",
+    "language": "BS",
+    "bitrate": 128,
+    "port": 18280,
+    "source": "http://116.203.7.166:9010/;stream.nsv"
+  },
+  {
+    "name": "RSG",
+    "genre": "Adult Contemporary",
+    "language": "BS",
+    "bitrate": 128,
+    "port": 18281,
+    "source": "http://stream.rsg.ba:9000/;stream "
+  },
+  {
+    "name": "Radio M",
+    "genre": "Rock, Pop, News",
+    "language": "BS",
+    "bitrate": 128,
+    "port": 18282,
+    "source": "http://team-data.ba:8030/;?type=http&nocache=57"
+  },
+  {
+    "name": "Kalman Radio",
+    "genre": "Folk",
+    "language": "BS",
+    "bitrate": 128,
+    "port": 18283,
+    "source": "http://188.40.62.20:8004/stream"
+  },
+  {
+    "name": "POP FM BS",
+    "genre": "Pop, Folk",
+    "language": "BS",
+    "bitrate": 128,
+    "port": 18284,
+    "source": "http://188.40.62.20:8032/;stream.nsv"
+  },
+  {
+    "name": "Kameleon",
+    "genre": "Adult Contemporary",
+    "language": "BS",
+    "bitrate": 128,
+    "port": 18285,
+    "source": "http://138.201.198.218:8075/;stream.nsv"
+  },
+  {
+    "name": "Radio D plus",
+    "genre": "Pop",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18286,
+    "source": "http://tachyon.shoutca.st:8303/xstream"
+  },
+  {
+    "name": "Radio D",
+    "genre": "Pop",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18287,
+    "source": "http://tachyon.shoutca.st:8289/xstream"
+  },
+  {
+    "name": "Elmag radio",
+    "genre": "Folk, Talk",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18288,
+    "source": "https://radio.elmag.me/elmag.mp3"
+  },
+  {
+    "name": "Radio Vala Rinore",
+    "genre": "Pop, Adult Contemporary",
+    "language": "SQ",
+    "bitrate": 128,
+    "port": 18289,
+    "source": "http://ca3.rcast.net:8024/;"
+  },
+  {
+    "name": "Radio Llapi",
+    "genre": "Folk, Sports",
+    "language": "SQ",
+    "bitrate": 128,
+    "port": 18290,
+    "source": "http://radio.1dhe1.com:8555/;"
+  },
+  {
+    "name": "Radio Dukagini",
+    "genre": "Rock, Pop",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18291,
+    "source": "http://s6.voscast.com:8824/;stream.mp3/;"
+  },
+  {
+    "name": "Radio Club FM Kosove",
+    "genre": "Rock, Pop",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18292,
+    "source": "https://cp1.sednastream.com/proxy/clubfmkosova?mp=/stream"
+  },
+  {
+    "name": "Radio Kosova e Lir\\xc3\\xab",
+    "genre": "News",
+    "language": "SQ",
+    "bitrate": 128,
+    "port": 18293,
+    "source": "https://radiokos.radioca.st/;"
+  },
+  {
+    "name": "Radio Prishtina",
+    "genre": "Rock, Pop, Folk",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18294,
+    "source": "https://stream.radio.co/sbe73908d2/listen"
+  },
+  {
+    "name": "Radio Fontana",
+    "genre": "Talk, News",
+    "language": "SQ",
+    "bitrate": 128,
+    "port": 18295,
+    "source": "https://live.radiostreaming.al:8010/;stream.mp3"
+  },
+  {
+    "name": "Radio Peja",
+    "genre": "Rock, Pop",
+    "language": "SR",
+    "bitrate": 128,
+    "port": 18296,
+    "source": "http://ns5.albaservers.com:8020/;?1516996701669.mp3"
+  },
+  {
+    "name": "Rock Fans Kosova",
+    "genre": "Rock",
+    "language": "SQ",
+    "bitrate": 128,
+    "port": 18297,
+    "source": "https://stream-153.zeno.fm/ybwz7k5gzchvv?zs=xzV7CDObQg2InZQNn6KWYQ "
+  },
+  {
+    "name": "Club FM",
+    "genre": "Adult Contemporary",
+    "language": "MK",
+    "bitrate": 128,
+    "port": 18298,
+    "source": "http://176.9.117.123:9996/;"
+  },
+  {
+    "name": "Radio Kavadarci",
+    "genre": "Folk",
+    "language": "MK",
+    "bitrate": 128,
+    "port": 18299,
+    "source": "https://stream-162.zeno.fm/a5ffd4skgg0uv?zs=Vc8ZjmmJR9aV90sbz7FyaA"
+  },
+  {
+    "name": "Radio Bubamara",
+    "genre": "Folk, Adult Contemporary",
+    "language": "MK",
+    "bitrate": 128,
+    "port": 18300,
+    "source": "http://stream.bubamara.com.mk/live-128.aac"
+  },
+  {
+    "name": "City Radio",
+    "genre": "Hits",
+    "language": "MK",
+    "bitrate": 128,
+    "port": 18301,
+    "source": "http://176.9.117.123:9998/;stream/1"
+  },
+  {
+    "name": "Radio 105 Bombarder",
+    "genre": "News, Sport",
+    "language": "MK",
+    "bitrate": 128,
+    "port": 18302,
+    "source": "http://radio105.makbots.com:21010/;stream.nsv"
+  },
+  {
+    "name": "Love Radio Digital",
+    "genre": "Pop",
+    "language": "SQ",
+    "bitrate": 128,
+    "port": 18303,
+    "source": "https://radio.albanialoveradio.al/stream"
+  },
+  {
+    "name": "Radio Shqip",
+    "genre": "Albanian Music",
+    "language": "SQ",
+    "bitrate": 128,
+    "port": 18304,
+    "source": "https://cp1.sednastream.com/proxy/radioshqip?mp=/stream"
+  },
+  {
+    "name": "Club FM SQ",
+    "genre": "Adult Contemporary",
+    "language": "SQ",
+    "bitrate": 128,
+    "port": 18305,
+    "source": "https://cp1.sednastream.com/proxy/clubfm?mp=/stream"
+  },
+  {
+    "name": "Radio DJ",
+    "genre": "Dance, Electronic",
+    "language": "SQ",
+    "bitrate": 128,
+    "port": 18306,
+    "source": "https://antena.albaniadigitalradio.al/radiodj"
+  },
+  {
+    "name": "Zeppelin 106.7",
+    "genre": "Rock",
+    "language": "GR",
+    "bitrate": 192,
+    "port": 18307,
+    "source": "https://radiostreaming.ert.gr/ert-zeppelin"
+  },
+  {
+    "name": "1055 Rock",
+    "genre": "Rock",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18308,
+    "source": "http://radio.1055rock.gr:30000/105"
+  },
+  {
+    "name": "89 FM Rainbow",
+    "genre": "Rock",
+    "language": "GR",
+    "bitrate": 96,
+    "port": 18309,
+    "source": "https://n0b.radiojar.com/083wqknmsuhvv?rj-ttl=5"
+  },
+  {
+    "name": "Rock Lab Radio",
+    "genre": "Classic Rock and Metal",
+    "language": "GR",
+    "bitrate": 320,
+    "port": 18310,
+    "source": "https://stream.zeno.fm/5fcz2fkbqtzuv"
+  },
+  {
+    "name": "Dust Radio",
+    "genre": "Rock and Metal",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18311,
+    "source": "https://eu8.fastcast4u.com/proxy/sotos?mp=/1"
+  },
+  {
+    "name": "Legend FM",
+    "genre": "Rock and Metal",
+    "language": "GR",
+    "bitrate": 160,
+    "port": 18312,
+    "source": "https://onairmediagroup.live24.gr/legend1016xanthi"
+  },
+  {
+    "name": "Rock Club",
+    "genre": "Heavy Metal",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18313,
+    "source": "https://stream.zeno.fm/av7zrzlnf3huv"
+  },
+  {
+    "name": "Kiss FM",
+    "genre": "Rock and Pop",
+    "language": "GR",
+    "bitrate": 192,
+    "port": 18314,
+    "source": "https://kissfm.live24.gr/kissfmathens"
+  },
+  {
+    "name": "RSO 91.7",
+    "genre": "Rock and Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18315,
+    "source": "http://tachyon.shoutca.st:8594/;"
+  },
+  {
+    "name": "Radio Astro",
+    "genre": "Rock and Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18316,
+    "source": "http://eco.onestreaming.com:8099/;"
+  },
+  {
+    "name": "Zucca Radio",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18317,
+    "source": "https://stream.zuccaradio.com/stream"
+  },
+  {
+    "name": "Radio 1",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18318,
+    "source": "http://111.gr:8000/;"
+  },
+  {
+    "name": "\\xce\\xa1\\xce\\xac\\xce\\xb4\\xce\\xb9\\xce\\xbf \\xce\\xa4\\xce\\xbf\\xce\\xbe\\xcf\\x8c\\xcf\\x84\\xce\\xb7\\xcf\\x82",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18319,
+    "source": "https://eco.onestreaming.com/proxy/toxotis/stream"
+  },
+  {
+    "name": "Imagine FM",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18320,
+    "source": "https://imagine897.radioca.st/;stream.nsv"
+  },
+  {
+    "name": "Alepou Radio",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18321,
+    "source": "https://n10.radiojar.com/h693vkmhe5uvv?rj-ttl=5"
+  },
+  {
+    "name": "Dalkas FM",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18322,
+    "source": "https://stream.radiojar.com/pr9r38w802hvv"
+  },
+  {
+    "name": "YES!",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18323,
+    "source": "https://ams-pioneer02.dedicateware.com:1060/;?type=http"
+  },
+  {
+    "name": "Kosmos",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18324,
+    "source": "https://radiostreaming.ert.gr/ert-kosmos"
+  },
+  {
+    "name": "MAGIC FM 98.2",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 96,
+    "port": 18325,
+    "source": "https://netradio.live24.gr/magic982"
+  },
+  {
+    "name": "Sferikos.gr",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18326,
+    "source": "http://eco.onestreaming.com:8012/;"
+  },
+  {
+    "name": "Eroticos FM",
+    "genre": "Pop",
+    "language": "GR",
+    "bitrate": 96,
+    "port": 18327,
+    "source": "https://eu1.fastcast4u.com/proxy/nmarog01?mp=/1"
+  },
+  {
+    "name": "Radio ENA",
+    "genre": "Pop and Folk",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18328,
+    "source": "https://n01.radiojar.com/t0x7dyqmsuhvv?rj-ttl=5"
+  },
+  {
+    "name": "Sok FM",
+    "genre": "Pop and Folk",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18329,
+    "source": "https://n09.radiojar.com/zeqcyyvu48hvv?rj-ttl=5"
+  },
+  {
+    "name": "Laikos FM",
+    "genre": "Pop and Folk",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18330,
+    "source": "https://netradio.live24.gr/laikos876"
+  },
+  {
+    "name": "Super FM",
+    "genre": "Pop and Folk",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18331,
+    "source": "http://dione.shoutca.st:8530/;"
+  },
+  {
+    "name": "Kritikos FM",
+    "genre": "Pop and Folk",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18332,
+    "source": "http://dione.shoutca.st:8443/;?1619626151706"
+  },
+  {
+    "name": "Glenti FM",
+    "genre": "Folk",
+    "language": "GR",
+    "bitrate": 160,
+    "port": 18333,
+    "source": "https://onairmediagroup.live24.gr/glenti1011xanthi?us_privacy=1YNY"
+  },
+  {
+    "name": "Erotas FM online",
+    "genre": "Folk, Pop and Rock",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18334,
+    "source": "http://eco.onestreaming.com:8368/;"
+  },
+  {
+    "name": "Love Radio",
+    "genre": "Folk, Pop and Rock",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18335,
+    "source": "https://loveradio-her.live24.gr/loveradio-her2"
+  },
+  {
+    "name": "Musicafe Radio",
+    "genre": "Oldies",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18336,
+    "source": "https://stream.zeno.fm/cngtgn2wea0uv"
+  },
+  {
+    "name": "Radio GoldStar",
+    "genre": "Oldies",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18337,
+    "source": "https://stream.laut.fm/radiogoldstar"
+  },
+  {
+    "name": "80sMania-radio",
+    "genre": "80s hits",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18338,
+    "source": "http://158.69.114.190:8065/stream"
+  },
+  {
+    "name": "Kalamaria FM",
+    "genre": "Hits",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18339,
+    "source": "https://ice.greekstream.net/gnomi"
+  },
+  {
+    "name": "My Radio 104.6",
+    "genre": "Hits",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18340,
+    "source": "https://streaming.myradio1046.fm/myradio1046"
+  },
+  {
+    "name": "Garavelas Radio Country",
+    "genre": "Country",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18341,
+    "source": "https://stream.radiojar.com/garavelas-radio-com.m4a"
+  },
+  {
+    "name": "Radio Art - Country",
+    "genre": "Country",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18342,
+    "source": "http://air.radioart.com/fCountry.mp3?dlid="
+  },
+  {
+    "name": "RadiOi",
+    "genre": "Punk and Rock",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18343,
+    "source": "https://eu4.fastcast4u.com/proxy/nikoud00?mp=/1"
+  },
+  {
+    "name": "djlrockradio",
+    "genre": "Punk and Rock",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18344,
+    "source": "http://whsh4u-panel.com:14155/stream"
+  },
+  {
+    "name": "Vanilla Radio Fresh Flavors",
+    "genre": "Hip-Hop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18345,
+    "source": "https://fresh.vanillaradio.com:8009/live"
+  },
+  {
+    "name": "Athens Party RNB",
+    "genre": "Hip-Hop and RNB",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18346,
+    "source": "https://ice.onestreaming.com/athenspartyrnb"
+  },
+  {
+    "name": "RnB Hits Radio",
+    "genre": "Hip-Hop and RnB",
+    "language": "GR",
+    "bitrate": 96,
+    "port": 18347,
+    "source": "https://stream-153.zeno.fm/ax5v5k9b2hhvv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJheDV2NWs5YjJoaHZ2IiwiaG9zdCI6InN0cmVhbS0xNTMuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6Ik5uV0RDaWxKUU1Hcmp3V0RIeXluVVEiLCJpYXQiOjE3MjU4ODgxOTgsImV4cCI6MTcyNTg4ODI1OH0.XcNFCFLTfFmSlZzcJQN_cp4z2aZQeDqHi7IusTE_ZPo"
+  },
+  {
+    "name": "Lobby Radio Rap & Trap",
+    "genre": "Rap",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18348,
+    "source": "https://stream.zeno.fm/e0cbypaxvchvv"
+  },
+  {
+    "name": "MC45",
+    "genre": "Rap",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18349,
+    "source": "https://solid2.streamupsolutions.com/proxy/wddmcway/stream"
+  },
+  {
+    "name": "ROFA Station",
+    "genre": "Rap",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18350,
+    "source": "https://duthradio.ddns.net:8010/radio.mp3"
+  },
+  {
+    "name": "Best Radio",
+    "genre": "Electronic",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18351,
+    "source": "https://best.live24.gr/best1222"
+  },
+  {
+    "name": "Fly 104",
+    "genre": "Electronic",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18352,
+    "source": "https://imagine2.radioca.st/;stream.nsv"
+  },
+  {
+    "name": "Island FM",
+    "genre": "Electronic",
+    "language": "EN",
+    "bitrate": 192,
+    "port": 18353,
+    "source": "https://sp3.streams.ovh/8014/stream"
+  },
+  {
+    "name": "Republic FM",
+    "genre": "Electronic",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18354,
+    "source": "https://metromedia.live24.gr/republicthess"
+  },
+  {
+    "name": "Trance Athena",
+    "genre": "Trance",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18355,
+    "source": "http://cast.streams.ovh:8008/stream"
+  },
+  {
+    "name": "Athens Up Radio",
+    "genre": "Electronic and House",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18356,
+    "source": "https://n13.radiojar.com/9ndpdg3c0s8uv?rj-ttl=5&rj-tok=AAABkaOvYUsAAqQP5zVE3-F1SQ"
+  },
+  {
+    "name": "Pepper",
+    "genre": "Jazz and Swing",
+    "language": "GR",
+    "bitrate": 192,
+    "port": 18357,
+    "source": "https://n0f.radiojar.com/pepper?rj-ttl=5&rj-tok=AAABkaOuIQYA0l7jYuZgP-xrLw"
+  },
+  {
+    "name": "Diva FM",
+    "genre": "Jazz and Swing",
+    "language": "GR",
+    "bitrate": 320,
+    "port": 18358,
+    "source": "http://176.31.120.166:6404/;"
+  },
+  {
+    "name": "Kosmos Jazz",
+    "genre": "Jazz and Swing",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18359,
+    "source": "https://radiostreaming.ert.gr/ert-webjazz"
+  },
+  {
+    "name": "Rain Music Radio",
+    "genre": "Jazz and Hip-Hop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18360,
+    "source": "https://thanasis.radioca.st/stream?"
+  },
+  {
+    "name": "Jazz Radio - Just Jazz",
+    "genre": "Jazz and Swing",
+    "language": "GR",
+    "bitrate": 96,
+    "port": 18361,
+    "source": "https://live.radioart.com/fJust_jazz.mp3?dlid="
+  },
+  {
+    "name": "Stigma Radio 97.6",
+    "genre": "Jazz and Pop",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18362,
+    "source": "https://sp3.streams.ovh/8062/stream"
+  },
+  {
+    "name": "Barfly Radio",
+    "genre": "Jazz and Rock",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18363,
+    "source": "http://ec2.yesstreaming.net:3350/stream"
+  },
+  {
+    "name": "Radio Art - Just Blues",
+    "genre": "Blues",
+    "language": "GR",
+    "bitrate": 96,
+    "port": 18364,
+    "source": "http://air.radioart.com/fJust_blues.mp3?dlid="
+  },
+  {
+    "name": "BluesWave Radio",
+    "genre": "Blues",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18365,
+    "source": "https://blueswave.radio:8000/blueswave"
+  },
+  {
+    "name": "DreamCity Web Radio",
+    "genre": "Blues",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18366,
+    "source": "https://cast.streams.ovh:9362/;"
+  },
+  {
+    "name": "Blue Radio",
+    "genre": "Blues",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18367,
+    "source": "http://centova32.instainternet.com:8033/stream"
+  },
+  {
+    "name": "Bottle o' Groove",
+    "genre": "Blues",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18368,
+    "source": "https://stream.radiojar.com/n8buhxbsk9duv"
+  },
+  {
+    "name": "Foxy Radio Station",
+    "genre": "Blues",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18369,
+    "source": "https://n0a.radiojar.com/n8buhxbsk9duv?rj-ttl=5&rj-tok=AAABkdbNcd4AsAz2bnU7EZNNww"
+  },
+  {
+    "name": "Cosmo Radio",
+    "genre": "Talk and News",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18370,
+    "source": "http://eco.onestreaming.com:8689/;"
+  },
+  {
+    "name": "Sport FM",
+    "genre": "Talk and News",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18371,
+    "source": "https://sportfm.live24.gr/sportfm7712"
+  },
+  {
+    "name": "Real FM",
+    "genre": "Talk and News",
+    "language": "GR",
+    "bitrate": 192,
+    "port": 18372,
+    "source": "https://realfm.live24.gr/realfm"
+  },
+  {
+    "name": "Metropolis 95.5",
+    "genre": "Talk and News",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18373,
+    "source": "https://metromedia.live24.gr/metropolis955thess"
+  },
+  {
+    "name": "Skai",
+    "genre": "Talk and News",
+    "language": "GR",
+    "bitrate": 128,
+    "port": 18374,
+    "source": "https://skai.live24.gr/skai1003-2"
+  }
+]
