@@ -5,6 +5,7 @@ export type Station = {
   bitrate: number;
   port: number;
   source: string;
+  favorite: boolean;
 };
 
 export type ThemeSettings = {

@@ -13,6 +13,7 @@ function normalizeStation(payload) {
     bitrate: Number(payload.bitrate),
     port: Number(payload.port),
     source: String(payload.source || "").trim(),
+    favorite: Boolean(payload.favorite),
   };
 }
 
@@ -95,7 +96,7 @@ function importFromETS2(ets2Dir, currentStations, logger = null) {
     if (!match) continue;
     const parts = match[2].split("|");
     if (parts.length !== 6) continue;
-    const [url, name, genre, language, bitrate] = parts;
+    const [url, name, genre, language, bitrate, favoriteFlag] = parts;
     const known = knownByName.get(name.toLowerCase());
     imported.push({
       name,
@@ -104,6 +105,7 @@ function importFromETS2(ets2Dir, currentStations, logger = null) {
       bitrate: Number(bitrate),
       port: 18100 + imported.length,
       source: known && LOCAL_RELAY_URL_PATTERN.test(url) ? known.source : url,
+      favorite: favoriteFlag === "1",
     });
   }
 
@@ -157,7 +159,9 @@ function syncToETS2(ets2Dir, stations, logger = null) {
 
   stations.forEach((station, index) => {
     lines.push(
-      ` stream_data[${index}]: "http://${GAME_STREAM_HOST}:${station.port}|${station.name}|${station.genre}|${station.language}|${station.bitrate}|1"`
+      ` stream_data[${index}]: "http://${GAME_STREAM_HOST}:${station.port}|${station.name}|${station.genre}|${station.language}|${station.bitrate}|${
+        station.favorite ? 1 : 0
+      }"`
     );
   });
 

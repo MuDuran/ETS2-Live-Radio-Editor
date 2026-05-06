@@ -16,7 +16,7 @@ import type {
 } from "./types";
 
 type ViewKey = "radios" | "runtime" | "settings";
-type SortKey = "index" | "name" | "source" | "genre" | "language" | "bitrate";
+type SortKey = "index" | "favorite" | "name" | "source" | "genre" | "language" | "bitrate";
 type SortDirection = "asc" | "desc";
 type IconName = "radios" | "runtime" | "settings" | "search";
 type NoticePayload = {
@@ -41,6 +41,7 @@ const EMPTY_STATION: Station = {
   bitrate: 128,
   port: 18100,
   source: "",
+  favorite: false,
 };
 
 const DEFAULT_THEME: ThemeSettings = {
@@ -353,6 +354,17 @@ function AppIcon({ name }: { name: IconName }) {
   );
 }
 
+function FavoriteStarIcon({ filled }: { filled: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="m12 3.85 2.51 5.09 5.61.82-4.06 3.95.96 5.58L12 16.65l-5.02 2.64.96-5.58-4.05-3.95 5.6-.82Z"
+        fill={filled ? "currentColor" : "none"}
+      />
+    </svg>
+  );
+}
+
 export default function App() {
   const [boot, setBoot] = useState<BootstrapPayload | null>(null);
   const [view, setView] = useState<ViewKey>("radios");
@@ -509,6 +521,8 @@ export default function App() {
       let comparison = 0;
       if (sortKey === "index") {
         comparison = left.index - right.index;
+      } else if (sortKey === "favorite") {
+        comparison = Number(left.station.favorite) - Number(right.station.favorite);
       } else if (sortKey === "bitrate") {
         comparison = left.station.bitrate - right.station.bitrate;
       } else {
@@ -748,6 +762,7 @@ export default function App() {
       bitrate: station.bitrate > 0 ? station.bitrate : 128,
       port: summary?.nextPort ?? 18100,
       source: station.streamUrl,
+      favorite: false,
     };
 
     const result = await window.radioApi.addStation(stationToAdd);
@@ -895,6 +910,31 @@ export default function App() {
       await stopRelays();
     } else {
       await startRelays();
+    }
+  }
+
+  function toggleDraftFavorite() {
+    setStationDraft((current) => ({
+      ...current,
+      favorite: !current.favorite,
+    }));
+  }
+
+  async function toggleStationFavorite(originalIndex: number) {
+    const station = stations[originalIndex];
+    if (!station) return;
+
+    const result = await window.radioApi.updateStation(originalIndex, {
+      ...station,
+      favorite: !station.favorite,
+    });
+    showResult(result);
+
+    if (selectedIndex === originalIndex && result.stations) {
+      const nextStation = result.stations[originalIndex];
+      if (nextStation) {
+        setStationDraft(nextStation);
+      }
     }
   }
 
@@ -1069,6 +1109,11 @@ export default function App() {
                             onChange={(event) => togglePageChecked(event.target.checked)}
                           />
                         </th>
+                        <th className="favorite-cell">
+                          <button className="sort-button" onClick={() => toggleSort("favorite")}>
+                            {t("col_favorite")} {sortIndicator("favorite")}
+                          </button>
+                        </th>
                         <th>
                           <button className="sort-button" onClick={() => toggleSort("index")}>
                             # {sortIndicator("index")}
@@ -1118,6 +1163,17 @@ export default function App() {
                                 checked={checked}
                                 onChange={() => toggleCheckedStation(stationKey(station))}
                               />
+                            </td>
+                            <td className="favorite-cell" onClick={(event) => event.stopPropagation()}>
+                              <button
+                                type="button"
+                                className={`favorite-star-button ${station.favorite ? "active" : ""}`}
+                                aria-label={station.favorite ? t("favorite_toggle_off", { name: station.name }) : t("favorite_toggle_on", { name: station.name })}
+                                title={station.favorite ? t("favorite_state_on") : t("favorite_state_off")}
+                                onClick={() => void toggleStationFavorite(originalIndex)}
+                              >
+                                <FavoriteStarIcon filled={station.favorite} />
+                              </button>
                             </td>
                             <td>{(pageNumber - 1) * PAGE_SIZE + rowIndex + 1}</td>
                             <td className="station-name-cell">
@@ -1185,6 +1241,21 @@ export default function App() {
                       <strong>{t("manual_help_title")}</strong>
                       <p>{t("manual_help_body")}</p>
                     </div>
+
+                    <button
+                      type="button"
+                      className={`favorite-toggle-card ${stationDraft.favorite ? "active" : ""}`}
+                      onClick={toggleDraftFavorite}
+                    >
+                      <span className={`favorite-toggle-icon ${stationDraft.favorite ? "active" : ""}`}>
+                        <FavoriteStarIcon filled={stationDraft.favorite} />
+                      </span>
+                      <span className="favorite-toggle-copy">
+                        <strong>{t("field_favorite")}</strong>
+                        <small>{stationDraft.favorite ? t("favorite_state_on") : t("favorite_state_off")}</small>
+                        <small>{t("field_favorite_help")}</small>
+                      </span>
+                    </button>
 
                     <div className="editor-form">
                       <label>

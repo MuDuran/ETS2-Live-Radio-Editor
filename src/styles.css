@@ -795,6 +795,42 @@ svg {
   text-align: center;
 }
 
+.favorite-cell {
+  width: 56px;
+  text-align: center;
+}
+
+.favorite-star-button {
+  width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: transform 160ms ease, color 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.favorite-star-button:hover {
+  transform: translateY(-1px);
+  color: #f1c761;
+  background: rgba(241, 199, 97, 0.08);
+  border-color: rgba(241, 199, 97, 0.16);
+}
+
+.favorite-star-button.active {
+  color: #f1c761;
+  background: rgba(241, 199, 97, 0.12);
+  border-color: rgba(241, 199, 97, 0.2);
+}
+
+.favorite-star-button svg {
+  width: 18px;
+  height: 18px;
+}
+
 .station-name-cell strong {
   display: block;
   font-size: 0.88rem;
@@ -1011,6 +1047,68 @@ svg {
   margin: 8px 0 0;
   color: var(--muted);
   line-height: 1.55;
+}
+
+.favorite-toggle-card {
+  margin: 0 16px 14px;
+  padding: 14px;
+  width: calc(100% - 32px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(90, 135, 165, 0.12);
+  background: var(--grid-surface);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.favorite-toggle-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(241, 199, 97, 0.18);
+}
+
+.favorite-toggle-card.active {
+  border-color: rgba(241, 199, 97, 0.24);
+  background: linear-gradient(180deg, rgba(48, 39, 17, 0.82), rgba(27, 24, 14, 0.82));
+}
+
+.favorite-toggle-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(16, 35, 49, 0.92);
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.favorite-toggle-icon.active {
+  color: #f1c761;
+  background: rgba(241, 199, 97, 0.16);
+}
+
+.favorite-toggle-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.favorite-toggle-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.favorite-toggle-copy strong {
+  font-size: 0.88rem;
+}
+
+.favorite-toggle-copy small {
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .editor-form {
