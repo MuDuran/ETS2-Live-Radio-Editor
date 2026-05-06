@@ -37,7 +37,7 @@ This initial import loads the radios that already exist in the game's current `l
 This project depends on `ffmpeg` to relay radio audio into ETS2.
 
 - In packaged Windows builds, `ffmpeg` is bundled with the app during the release process.
-- In local development, the app can still use a system installation such as `C:\FFMpeg\bin\ffmpeg.exe` if needed.
+- In local development, the app can still use a system installation such as `C:\ffmpeg\bin\ffmpeg.exe` if needed.
 
 Official project:
 - [FFmpeg official website](https://ffmpeg.org/)
@@ -68,7 +68,7 @@ Official project:
 ### Development
 
 ```powershell
-cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+cd "<project-root>"
 npm install
 npm run dev
 ```
@@ -76,14 +76,14 @@ npm run dev
 ### Build for distribution
 
 ```powershell
-cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+cd "<project-root>"
 npm run build
 ```
 
 For GitHub release packaging, the project uses:
 
 ```powershell
-cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+cd "<project-root>"
 npm run build:release
 ```
 
@@ -98,7 +98,7 @@ The release build now includes an extra safety validation step before packaging:
 You can run only this validation with:
 
 ```powershell
-cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+cd "<project-root>"
 npm run verify:release
 ```
 
@@ -176,7 +176,7 @@ Essa importação inicial carrega para o app as rádios que já existem no arqui
 Este projeto depende do `ffmpeg` para entregar o áudio das rádios ao ETS2.
 
 - Nas builds empacotadas para Windows, o `ffmpeg` é incluído no app durante o processo de release.
-- No desenvolvimento local, o app também pode usar uma instalação do sistema, como `C:\FFMpeg\bin\ffmpeg.exe`, quando necessário.
+- No desenvolvimento local, o app também pode usar uma instalação do sistema, como `C:\ffmpeg\bin\ffmpeg.exe`, quando necessário.
 
 Projeto oficial:
 - [Site oficial do FFmpeg](https://ffmpeg.org/)
@@ -207,7 +207,7 @@ Projeto oficial:
 ### Como rodar em desenvolvimento
 
 ```powershell
-cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+cd "<pasta-do-projeto>"
 npm install
 npm run dev
 ```
@@ -215,14 +215,14 @@ npm run dev
 ### Como gerar build para distribuição
 
 ```powershell
-cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+cd "<pasta-do-projeto>"
 npm run build
 ```
 
 Para empacotamento de release no GitHub, o projeto usa:
 
 ```powershell
-cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+cd "<pasta-do-projeto>"
 npm run build:release
 ```
 
@@ -237,7 +237,7 @@ O build de release agora inclui uma validação extra antes do empacotamento:
 Se quiser rodar só essa verificação, use:
 
 ```powershell
-cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+cd "<pasta-do-projeto>"
 npm run verify:release
 ```
 
