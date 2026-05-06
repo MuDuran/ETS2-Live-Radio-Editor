@@ -3,6 +3,7 @@ const path = require("node:path");
 const { execFileSync } = require("node:child_process");
 const { app, BrowserWindow, ipcMain, Menu, Tray, nativeImage, shell } = require("electron");
 const { createStorage } = require("./storage.cjs");
+const { createLogger } = require("./logger.cjs");
 const { DEFAULT_ETS2_DIR, DEFAULT_FFMPEG, BUNDLED_FFMPEG } = require("./constants.cjs");
 const {
   normalizeStation,
@@ -23,6 +24,7 @@ let settings = null;
 let environment = null;
 let tray = null;
 let isQuitting = false;
+let mainLogger = null;
 
 function getRendererUrl() {
   return process.env.ELECTRON_RENDERER_URL || null;
@@ -213,9 +215,14 @@ function persistSettings(nextSettings) {
 
 function buildStationMutationResponse(nextStations, successMessageKey, vars = {}) {
   persistStations(nextStations);
-  const syncResult = syncToETS2(settings.ets2Dir, stations);
+  const syncResult = syncToETS2(settings.ets2Dir, stations, mainLogger);
 
   if (!syncResult.ok) {
+    mainLogger?.warn("Station mutation saved locally but ETS2 sync failed", {
+      successMessageKey,
+      stationCount: stations.length,
+      path: syncResult.vars?.path || syncResult.path || "",
+    });
     return {
       ok: false,
       titleKey: "sync_error_title",
@@ -229,6 +236,11 @@ function buildStationMutationResponse(nextStations, successMessageKey, vars = {}
     };
   }
 
+  mainLogger?.info("Station mutation and ETS2 sync completed", {
+    successMessageKey,
+    stationCount: stations.length,
+    path: syncResult.path,
+  });
   return {
     ok: true,
     path: syncResult.path,
@@ -321,11 +333,15 @@ function createTray() {
 }
 
 function createWindow() {
+  const windowIcon = process.platform === "win32"
+    ? getIconAssetPath("ETS2-Radio-Relay-Logo.ico")
+    : getIconAssetPath("ETS2-Radio-Relay-Logo.png");
+
   mainWindow = new BrowserWindow({
     width: 1560,
     height: 940,
     backgroundColor: "#06101c",
-    icon: getIconAssetPath("ETS2-Radio-Relay-Logo.png"),
+    icon: windowIcon,
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
@@ -364,11 +380,19 @@ function createWindow() {
 
 function bootstrapState() {
   storage = createStorage();
-  relayService = new RelayService(storage);
+  mainLogger = createLogger(path.join(storage.logsDir, "main.log"), "main");
+  relayService = new RelayService(storage, createLogger(path.join(storage.logsDir, "relay.log"), "relay"));
   const storedStations = storage.readStations();
   stations = storedStations.map((station) => normalizeStation(station));
   settings = storage.readSettings();
   refreshEnvironmentState();
+  mainLogger.info("Application bootstrap complete", {
+    stationCount: stations.length,
+    userDataDir: storage.dataDir,
+    logsDir: storage.logsDir,
+    ets2Dir: settings.ets2Dir,
+    ffmpegPath: settings.ffmpegPath,
+  });
 
   const needsStationMigration = JSON.stringify(storedStations) !== JSON.stringify(stations);
   if (needsStationMigration) {
@@ -445,6 +469,11 @@ function registerIpc() {
   ipcMain.handle("app:save-settings", (_event, partial) => {
     persistSettings(partial);
     const nextEnvironment = refreshEnvironmentState();
+    mainLogger?.info("Settings updated", {
+      changedKeys: Object.keys(partial || {}),
+      ets2Dir: settings.ets2Dir,
+      ffmpegPath: settings.ffmpegPath,
+    });
     return { ok: true, settings, environment: nextEnvironment };
   });
 
@@ -491,7 +520,7 @@ function registerIpc() {
   });
 
   ipcMain.handle("app:import-ets2", () => {
-    const result = importFromETS2(settings.ets2Dir, stations);
+    const result = importFromETS2(settings.ets2Dir, stations, mainLogger);
     if (!result.ok) return result;
     persistStations(result.stations);
     return {
@@ -507,7 +536,7 @@ function registerIpc() {
   });
 
   ipcMain.handle("app:sync-ets2", () => {
-    const result = syncToETS2(settings.ets2Dir, stations);
+    const result = syncToETS2(settings.ets2Dir, stations, mainLogger);
     if (!result.ok) return result;
     return {
       ok: true,
@@ -519,6 +548,11 @@ function registerIpc() {
   ipcMain.handle("app:start-relays", async () => {
     const currentEnvironment = refreshEnvironmentState();
     const result = await relayService.startRelays(stations, settings.ffmpegPath);
+    mainLogger?.info("Relay start request completed", {
+      ok: result.ok,
+      listenerCount: relayService.preparedCount(),
+      activeCount: relayService.activeCount(),
+    });
     if (!result.ok) {
       return { ...result, environment: currentEnvironment, telemetry: getTelemetryPayload() };
     }
@@ -536,6 +570,7 @@ function registerIpc() {
 
   ipcMain.handle("app:stop-relays", () => {
     relayService.stopRelays();
+    mainLogger?.info("Relay stop request completed");
     updateTrayMenu();
     return {
       ok: true,

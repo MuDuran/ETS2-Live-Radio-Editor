@@ -2,6 +2,8 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const STREAM_LINE_PATTERN = /^\s*stream_data\[(\d+)\]: "(.*)"\s*$/;
+const GAME_STREAM_HOST = "localhost";
+const LOCAL_RELAY_URL_PATTERN = /^http:\/\/(?:127\.0\.0\.1|localhost):/i;
 
 function normalizeStation(payload) {
   return {
@@ -70,9 +72,12 @@ function validateStation(station, stations, originalName = null) {
   return { ok: true };
 }
 
-function importFromETS2(ets2Dir, currentStations) {
+function importFromETS2(ets2Dir, currentStations, logger = null) {
   const liveStreamsPath = path.join(ets2Dir, "live_streams.sii");
+  logger?.info("Import requested from ETS2", { ets2Dir, liveStreamsPath });
+
   if (!fs.existsSync(liveStreamsPath)) {
+    logger?.warn("ETS2 import failed because live_streams.sii was not found", { liveStreamsPath });
     return {
       ok: false,
       titleKey: "import_error_title",
@@ -98,11 +103,12 @@ function importFromETS2(ets2Dir, currentStations) {
       language,
       bitrate: Number(bitrate),
       port: 18100 + imported.length,
-      source: known && url.startsWith("http://127.0.0.1:") ? known.source : url,
+      source: known && LOCAL_RELAY_URL_PATTERN.test(url) ? known.source : url,
     });
   }
 
   if (!imported.length) {
+    logger?.warn("ETS2 import found no valid stations", { liveStreamsPath });
     return {
       ok: false,
       titleKey: "import_error_title",
@@ -110,14 +116,25 @@ function importFromETS2(ets2Dir, currentStations) {
     };
   }
 
+  logger?.info("ETS2 import completed", {
+    liveStreamsPath,
+    stationCount: imported.length,
+  });
+
   return { ok: true, stations: imported };
 }
 
-function syncToETS2(ets2Dir, stations) {
+function syncToETS2(ets2Dir, stations, logger = null) {
   const liveStreamsPath = path.join(ets2Dir, "live_streams.sii");
   const backupPath = path.join(ets2Dir, "live_streams.gui-backup.sii");
+  logger?.info("ETS2 sync requested", {
+    ets2Dir,
+    liveStreamsPath,
+    stationCount: stations.length,
+  });
 
   if (!fs.existsSync(liveStreamsPath)) {
+    logger?.warn("ETS2 sync failed because live_streams.sii was not found", { liveStreamsPath });
     return {
       ok: false,
       titleKey: "sync_error_title",
@@ -128,6 +145,7 @@ function syncToETS2(ets2Dir, stations) {
 
   if (!fs.existsSync(backupPath)) {
     fs.copyFileSync(liveStreamsPath, backupPath);
+    logger?.info("ETS2 backup created", { backupPath });
   }
 
   const lines = [
@@ -139,7 +157,7 @@ function syncToETS2(ets2Dir, stations) {
 
   stations.forEach((station, index) => {
     lines.push(
-      ` stream_data[${index}]: "http://127.0.0.1:${station.port}|${station.name}|${station.genre}|${station.language}|${station.bitrate}|1"`
+      ` stream_data[${index}]: "http://${GAME_STREAM_HOST}:${station.port}|${station.name}|${station.genre}|${station.language}|${station.bitrate}|1"`
     );
   });
 
@@ -147,6 +165,12 @@ function syncToETS2(ets2Dir, stations) {
   lines.push("}");
 
   fs.writeFileSync(liveStreamsPath, lines.join("\n") + "\n", "utf-8");
+  logger?.info("ETS2 sync completed", {
+    liveStreamsPath,
+    backupPath,
+    stationCount: stations.length,
+    firstRelayUrl: stations[0] ? `http://${GAME_STREAM_HOST}:${stations[0].port}` : null,
+  });
 
   return {
     ok: true,
@@ -160,4 +184,5 @@ module.exports = {
   validateStation,
   importFromETS2,
   syncToETS2,
+  GAME_STREAM_HOST,
 };

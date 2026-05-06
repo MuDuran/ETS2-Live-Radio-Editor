@@ -4,8 +4,9 @@ const http = require("node:http");
 const { spawn } = require("node:child_process");
 
 class RelayService {
-  constructor(storage) {
+  constructor(storage, logger) {
     this.storage = storage;
+    this.logger = logger;
     this.listeners = new Map();
     this.sessions = new Map();
     this.statuses = new Map();
@@ -73,7 +74,13 @@ class RelayService {
   }
 
   async startRelays(stations, ffmpegPath) {
+    this.logger?.info("Relay startup requested", {
+      stationCount: Array.isArray(stations) ? stations.length : 0,
+      ffmpegPath,
+    });
+
     if (!Array.isArray(stations) || stations.length === 0) {
+      this.logger?.warn("Relay startup aborted because there are no stations");
       return {
         ok: false,
         titleKey: "error_no_stations_title",
@@ -82,6 +89,7 @@ class RelayService {
     }
 
     if (!fs.existsSync(ffmpegPath)) {
+      this.logger?.warn("Relay startup aborted because ffmpeg was not found", { ffmpegPath });
       return {
         ok: false,
         titleKey: "error_ffmpeg_title",
@@ -104,6 +112,10 @@ class RelayService {
       this.lastStartDurationMs = Date.now() - startedAt;
       this.startupInProgress = false;
       this.saveState(stations);
+      this.logger?.info("Relay listeners are armed", {
+        stationCount: stations.length,
+        durationMs: this.lastStartDurationMs,
+      });
       return {
         ok: true,
         vars: { count: stations.length, durationMs: this.lastStartDurationMs },
@@ -111,6 +123,9 @@ class RelayService {
     } catch (error) {
       this.startupInProgress = false;
       this.stopRelays();
+      this.logger?.error("Relay startup failed while preparing listeners", {
+        reason: error.message || "unknown",
+      });
       return {
         ok: false,
         titleKey: "relay_listener_error_title",
@@ -123,6 +138,11 @@ class RelayService {
   async createListener(station, ffmpegPath) {
     const port = Number(station.port);
     this.statuses.set(port, { key: "status_starting", vars: { port: station.port } });
+    this.logger?.info("Creating relay listener", {
+      station: station.name,
+      port,
+      source: station.source,
+    });
 
     const server = http.createServer((request, response) => {
       this.handleListenerRequest(station, ffmpegPath, request, response);
@@ -130,13 +150,18 @@ class RelayService {
 
     await new Promise((resolve, reject) => {
       server.once("error", reject);
-      server.listen(port, "127.0.0.1", () => {
+      server.listen(port, () => {
         server.removeListener("error", reject);
         resolve();
       });
     });
 
     server.on("error", (error) => {
+      this.logger?.error("Relay listener error", {
+        station: station.name,
+        port,
+        reason: error.message || "listener-error",
+      });
       this.statuses.set(port, {
         key: "status_error",
         vars: { reason: error.message || "listener-error" },
@@ -145,10 +170,23 @@ class RelayService {
 
     this.listeners.set(port, { port, server, station });
     this.statuses.set(port, { key: "status_waiting_request", vars: { port: station.port } });
+    this.logger?.info("Relay listener ready", {
+      station: station.name,
+      port,
+      host: "0.0.0.0",
+    });
   }
 
   handleListenerRequest(station, ffmpegPath, request, response) {
     const port = Number(station.port);
+    this.logger?.info("Relay listener received request", {
+      station: station.name,
+      port,
+      method: request.method,
+      url: request.url,
+      userAgent: request.headers["user-agent"] || null,
+      host: request.headers.host || null,
+    });
 
     if (request.method === "HEAD") {
       response.writeHead(200, {
@@ -212,6 +250,12 @@ class RelayService {
 
     this.sessions.set(port, session);
     this.saveState(this.getListenerStations());
+    this.logger?.info("Spawning ffmpeg relay session", {
+      station: station.name,
+      port,
+      stderrPath,
+      source: station.source,
+    });
 
     const finalizeSession = (expectedStop, reason = null) => {
       const current = this.sessions.get(port);
@@ -237,6 +281,12 @@ class RelayService {
       }
 
       this.saveState(this.getListenerStations());
+      this.logger?.info("Relay session finished", {
+        station: station.name,
+        port,
+        expectedStop,
+        reason,
+      });
     };
 
     process.once("spawn", () => {
@@ -246,6 +296,11 @@ class RelayService {
       });
       this.statuses.set(port, { key: "status_running", vars: { port: station.port } });
       process.stdout.pipe(response);
+      this.logger?.info("ffmpeg relay session started", {
+        station: station.name,
+        port,
+        pid: process.pid,
+      });
     });
 
     process.once("error", (error) => {
@@ -253,6 +308,11 @@ class RelayService {
         response.writeHead(502, { "Content-Type": "text/plain; charset=utf-8" });
       }
       response.end("ffmpeg error");
+      this.logger?.error("ffmpeg relay process error", {
+        station: station.name,
+        port,
+        reason: error.message || "spawn-error",
+      });
       finalizeSession(false, error.message || "spawn-error");
     });
 
@@ -268,6 +328,12 @@ class RelayService {
         return;
       }
 
+      this.logger?.warn("ffmpeg relay exited unexpectedly", {
+        station: station.name,
+        port,
+        code,
+        signal,
+      });
       finalizeSession(false, code !== null ? `exit-${code}` : signal || "unknown");
     });
 
@@ -284,6 +350,11 @@ class RelayService {
     if (!session) return;
 
     session.expectedStop = expectedStop;
+    this.logger?.info("Stopping relay session", {
+      port: Number(port),
+      expectedStop,
+      pid: session.process.pid,
+    });
     try {
       if (!session.process.killed && session.process.exitCode === null) {
         session.process.kill();
@@ -293,6 +364,10 @@ class RelayService {
 
   stopRelays() {
     this.startupInProgress = false;
+    this.logger?.info("Stopping all relays", {
+      listenerCount: this.listeners.size,
+      sessionCount: this.sessions.size,
+    });
 
     for (const port of [...this.sessions.keys()]) {
       this.stopSession(port, true);

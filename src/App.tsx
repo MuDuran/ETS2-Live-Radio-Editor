@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supportedLanguages, translate } from "./i18n";
+import paypalBadgeUrl from "../assets/icons/BUTAODOMAJOR2.png";
 import type {
   AppSettings,
   BackendResponse,
@@ -939,7 +940,7 @@ export default function App() {
 
           <div className="sidebar-support">
             <button className="paypal-badge-button" onClick={openPayPalDonation}>
-              <img src="./assets/icons/BUTAODOMAJOR2.png" alt="" aria-hidden="true" className="paypal-badge-image" />
+              <img src={paypalBadgeUrl} alt="" aria-hidden="true" className="paypal-badge-image" />
               <strong className="paypal-badge-label">{t("support_paypal_button")}</strong>
             </button>
           </div>
