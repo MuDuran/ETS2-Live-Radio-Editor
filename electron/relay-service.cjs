@@ -3,6 +3,8 @@ const path = require("node:path");
 const http = require("node:http");
 const { spawn } = require("node:child_process");
 
+const CLOSE_GRACE_MS = 1500;
+
 class RelayService {
   constructor(storage, logger) {
     this.storage = storage;
@@ -179,6 +181,7 @@ class RelayService {
 
   handleListenerRequest(station, ffmpegPath, request, response) {
     const port = Number(station.port);
+    const requestStartedAt = Date.now();
     this.logger?.info("Relay listener received request", {
       station: station.name,
       port,
@@ -186,6 +189,8 @@ class RelayService {
       url: request.url,
       userAgent: request.headers["user-agent"] || null,
       host: request.headers.host || null,
+      remoteAddress: request.socket?.remoteAddress || null,
+      remotePort: request.socket?.remotePort || null,
     });
 
     if (request.method === "HEAD") {
@@ -204,7 +209,7 @@ class RelayService {
       return;
     }
 
-    this.stopSession(port, true);
+    this.stopSession(port, true, "new-request");
     this.statuses.set(port, { key: "status_starting", vars: { port: station.port } });
 
     const stderrPath = path.join(this.storage.logsDir, `${station.port}.stderr.log`);
@@ -246,6 +251,11 @@ class RelayService {
       stderr,
       response,
       expectedStop: false,
+      requestStartedAt,
+      firstChunkAt: null,
+      bytesSent: 0,
+      pendingStopTimer: null,
+      pendingStopReason: null,
     };
 
     this.sessions.set(port, session);
@@ -267,6 +277,10 @@ class RelayService {
       }
 
       this.sessions.delete(port);
+      if (current.pendingStopTimer) {
+        clearTimeout(current.pendingStopTimer);
+        current.pendingStopTimer = null;
+      }
       try {
         fs.closeSync(stderr);
       } catch {}
@@ -286,6 +300,60 @@ class RelayService {
         port,
         expectedStop,
         reason,
+        bytesSent: current.bytesSent,
+        firstChunkLatencyMs: current.firstChunkAt ? current.firstChunkAt - current.requestStartedAt : null,
+      });
+    };
+
+    const cancelPendingStop = (cause) => {
+      const current = this.sessions.get(port);
+      if (!current || current.process !== process || !current.pendingStopTimer) return;
+      clearTimeout(current.pendingStopTimer);
+      current.pendingStopTimer = null;
+      this.logger?.info("Cancelled pending relay shutdown", {
+        station: station.name,
+        port,
+        cause,
+        previousReason: current.pendingStopReason,
+      });
+      current.pendingStopReason = null;
+    };
+
+    const scheduleGracefulStop = (reason) => {
+      const current = this.sessions.get(port);
+      if (!current || current.process !== process) return;
+      if (current.pendingStopTimer) {
+        this.logger?.info("Relay shutdown already scheduled", {
+          station: station.name,
+          port,
+          reason,
+          previousReason: current.pendingStopReason,
+        });
+        return;
+      }
+
+      current.pendingStopReason = reason;
+      current.pendingStopTimer = setTimeout(() => {
+        const liveSession = this.sessions.get(port);
+        if (!liveSession || liveSession.process !== process) return;
+        liveSession.pendingStopTimer = null;
+        this.logger?.info("Relay close grace period elapsed", {
+          station: station.name,
+          port,
+          reason,
+          graceMs: CLOSE_GRACE_MS,
+          bytesSent: liveSession.bytesSent,
+          firstChunkLatencyMs: liveSession.firstChunkAt ? liveSession.firstChunkAt - liveSession.requestStartedAt : null,
+        });
+        this.stopSession(port, true, `grace-elapsed:${reason}`);
+      }, CLOSE_GRACE_MS);
+
+      this.logger?.info("Scheduled graceful relay shutdown", {
+        station: station.name,
+        port,
+        reason,
+        graceMs: CLOSE_GRACE_MS,
+        bytesSent: current.bytesSent,
       });
     };
 
@@ -295,12 +363,68 @@ class RelayService {
         "Cache-Control": "no-store",
       });
       this.statuses.set(port, { key: "status_running", vars: { port: station.port } });
-      process.stdout.pipe(response);
       this.logger?.info("ffmpeg relay session started", {
         station: station.name,
         port,
         pid: process.pid,
       });
+    });
+
+    process.stdout.on("data", (chunk) => {
+      const current = this.sessions.get(port);
+      if (!current || current.process !== process) return;
+
+      cancelPendingStop("stdout-data");
+
+      if (!current.firstChunkAt) {
+        current.firstChunkAt = Date.now();
+        this.logger?.info("Relay emitted first audio chunk", {
+          station: station.name,
+          port,
+          latencyMs: current.firstChunkAt - current.requestStartedAt,
+          chunkBytes: chunk.length,
+        });
+      }
+
+      current.bytesSent += chunk.length;
+
+      if (response.destroyed || response.writableEnded) {
+        this.logger?.warn("Discarded relay chunk because response was already closed", {
+          station: station.name,
+          port,
+          chunkBytes: chunk.length,
+          totalBytesSent: current.bytesSent,
+        });
+        return;
+      }
+
+      const shouldContinue = response.write(chunk);
+      if (!shouldContinue) {
+        process.stdout.pause();
+        this.logger?.info("Relay response backpressure detected", {
+          station: station.name,
+          port,
+          totalBytesSent: current.bytesSent,
+        });
+        response.once("drain", () => {
+          this.logger?.info("Relay response drain event received", {
+            station: station.name,
+            port,
+            totalBytesSent: current.bytesSent,
+          });
+          process.stdout.resume();
+        });
+      }
+    });
+
+    process.stdout.once("end", () => {
+      this.logger?.info("ffmpeg stdout ended", {
+        station: station.name,
+        port,
+      });
+      if (!response.writableEnded && !response.destroyed) {
+        response.end();
+      }
     });
 
     process.once("error", (error) => {
@@ -337,23 +461,85 @@ class RelayService {
       finalizeSession(false, code !== null ? `exit-${code}` : signal || "unknown");
     });
 
-    const closeSession = () => {
-      this.stopSession(port, true);
+    const closeSession = (reason) => {
+      scheduleGracefulStop(reason);
     };
 
-    request.once("aborted", closeSession);
-    response.once("close", closeSession);
+    request.once("aborted", () => {
+      this.logger?.warn("Relay request aborted by client", {
+        station: station.name,
+        port,
+      });
+      closeSession("request-aborted");
+    });
+
+    request.once("close", () => {
+      this.logger?.info("Relay request stream closed", {
+        station: station.name,
+        port,
+        bytesSent: session.bytesSent,
+      });
+    });
+
+    request.once("error", (error) => {
+      this.logger?.warn("Relay request stream error", {
+        station: station.name,
+        port,
+        reason: error.message || "request-error",
+      });
+    });
+
+    response.once("finish", () => {
+      this.logger?.info("Relay response finished", {
+        station: station.name,
+        port,
+        bytesSent: session.bytesSent,
+      });
+    });
+
+    response.once("close", () => {
+      this.logger?.warn("Relay response closed", {
+        station: station.name,
+        port,
+        bytesSent: session.bytesSent,
+        firstChunkLatencyMs: session.firstChunkAt ? session.firstChunkAt - session.requestStartedAt : null,
+      });
+      closeSession("response-close");
+    });
+
+    response.once("error", (error) => {
+      this.logger?.warn("Relay response stream error", {
+        station: station.name,
+        port,
+        reason: error.message || "response-error",
+      });
+    });
+
+    response.socket?.once("close", (hadError) => {
+      this.logger?.warn("Relay socket closed", {
+        station: station.name,
+        port,
+        hadError,
+      });
+    });
   }
 
-  stopSession(port, expectedStop = false) {
+  stopSession(port, expectedStop = false, reason = null) {
     const session = this.sessions.get(Number(port));
     if (!session) return;
 
+    if (session.pendingStopTimer) {
+      clearTimeout(session.pendingStopTimer);
+      session.pendingStopTimer = null;
+    }
     session.expectedStop = expectedStop;
     this.logger?.info("Stopping relay session", {
       port: Number(port),
       expectedStop,
       pid: session.process.pid,
+      reason,
+      bytesSent: session.bytesSent,
+      firstChunkLatencyMs: session.firstChunkAt ? session.firstChunkAt - session.requestStartedAt : null,
     });
     try {
       if (!session.process.killed && session.process.exitCode === null) {
