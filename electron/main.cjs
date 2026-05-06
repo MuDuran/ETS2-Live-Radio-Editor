@@ -15,6 +15,7 @@ const {
 const { getCatalogFilters, searchStations, verifyStreamUrl } = require("./radio-browser-service.cjs");
 const { RelayService } = require("./relay-service.cjs");
 const translationPayload = require("../shared/translations.json");
+const APP_USER_MODEL_ID = "com.muduran.ets2-live-radio-editor";
 
 let mainWindow = null;
 let storage = null;
@@ -584,6 +585,9 @@ function registerIpc() {
 }
 
 app.whenReady().then(() => {
+  if (process.platform === "win32") {
+    app.setAppUserModelId(APP_USER_MODEL_ID);
+  }
   bootstrapState();
   registerIpc();
   createWindow();

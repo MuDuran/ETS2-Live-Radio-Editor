@@ -32,9 +32,28 @@ jobs:
       - name: Prepare bundled ffmpeg
         shell: pwsh
         run: |
-          $ffmpegPath = (Get-Command ffmpeg).Source
+          $candidatePaths = @(
+            "C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe",
+            "C:\ProgramData\chocolatey\bin\ffmpeg.exe"
+          )
+
+          $ffmpegPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $ffmpegPath) {
+            throw "Could not locate a bundled ffmpeg executable after Chocolatey install."
+          }
+
+          $ffmpegItem = Get-Item $ffmpegPath
+          if ($ffmpegItem.Length -lt 5MB) {
+            throw "The located ffmpeg executable is too small ($($ffmpegItem.Length) bytes). This looks like a wrapper instead of the real binary."
+          }
+
           New-Item -ItemType Directory -Force -Path vendor/ffmpeg | Out-Null
           Copy-Item -LiteralPath $ffmpegPath -Destination vendor/ffmpeg/ffmpeg.exe -Force
+
+      - name: Verify bundled ffmpeg
+        shell: pwsh
+        run: |
+          npm run verify:bundled-ffmpeg
 
       - name: Build distributable packages
         shell: pwsh

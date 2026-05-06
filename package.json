@@ -1,6 +1,6 @@
 {
   "name": "ets2-live-radio-editor",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Desktop app to manage ETS2 live radios with local ffmpeg relays.",
   "main": "electron/main.cjs",
   "author": "Murilo Duran",
@@ -9,8 +9,9 @@
     "dev": "concurrently -k \"vite\" \"wait-on tcp:5173 && cross-env ELECTRON_RENDERER_URL=http://127.0.0.1:5173 electron .\"",
     "build:renderer": "vite build",
     "verify:release": "node scripts/verify-release-build.cjs",
+    "verify:bundled-ffmpeg": "node scripts/verify-bundled-ffmpeg.cjs",
     "build": "npm run build:renderer && npm run verify:release && electron-builder",
-    "build:release": "npm run build:renderer && npm run verify:release && electron-builder --publish never",
+    "build:release": "npm run build:renderer && npm run verify:release && npm run verify:bundled-ffmpeg && electron-builder --publish never",
     "preview": "vite preview"
   },
   "build": {
@@ -48,7 +49,12 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icons/ETS2-Radio-Relay-Logo.ico",
+      "uninstallerIcon": "assets/icons/ETS2-Radio-Relay-Logo.ico",
+      "installerHeaderIcon": "assets/icons/ETS2-Radio-Relay-Logo.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   },
   "devDependencies": {
