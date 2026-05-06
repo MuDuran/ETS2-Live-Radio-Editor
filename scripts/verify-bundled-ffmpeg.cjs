@@ -3,8 +3,17 @@ const path = require("node:path");
 const { execFileSync } = require("node:child_process");
 
 const projectRoot = path.resolve(__dirname, "..");
-const bundledFfmpegPath = path.join(projectRoot, "vendor", "ffmpeg", "ffmpeg.exe");
 const minimumExpectedSizeBytes = 5 * 1024 * 1024;
+
+function resolveTargetPath() {
+  const customPath = process.argv[2];
+  if (customPath) {
+    return path.resolve(projectRoot, customPath);
+  }
+  return path.join(projectRoot, "vendor", "ffmpeg", "ffmpeg.exe");
+}
+
+const bundledFfmpegPath = resolveTargetPath();
 
 function fail(message) {
   console.error(`[verify-bundled-ffmpeg] ${message}`);

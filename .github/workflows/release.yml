@@ -26,25 +26,25 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install ffmpeg
-        run: choco install ffmpeg -y
-
       - name: Prepare bundled ffmpeg
         shell: pwsh
         run: |
-          $candidatePaths = @(
-            "C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin\ffmpeg.exe",
-            "C:\ProgramData\chocolatey\bin\ffmpeg.exe"
-          )
+          $ffmpegZipUrl = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+          $downloadPath = Join-Path $env:RUNNER_TEMP "ffmpeg-release-essentials.zip"
+          $extractDir = Join-Path $env:RUNNER_TEMP "ffmpeg-release-essentials"
 
-          $ffmpegPath = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
-          if (-not $ffmpegPath) {
-            throw "Could not locate a bundled ffmpeg executable after Chocolatey install."
+          Invoke-WebRequest -Uri $ffmpegZipUrl -OutFile $downloadPath
+          if (Test-Path $extractDir) {
+            Remove-Item -LiteralPath $extractDir -Recurse -Force
           }
+          Expand-Archive -LiteralPath $downloadPath -DestinationPath $extractDir -Force
 
-          $ffmpegItem = Get-Item $ffmpegPath
-          if ($ffmpegItem.Length -lt 5MB) {
-            throw "The located ffmpeg executable is too small ($($ffmpegItem.Length) bytes). This looks like a wrapper instead of the real binary."
+          $ffmpegPath = Get-ChildItem -Path $extractDir -Filter ffmpeg.exe -Recurse |
+            Where-Object { $_.FullName -match "\\bin\\ffmpeg\.exe$" } |
+            Select-Object -First 1 -ExpandProperty FullName
+
+          if (-not $ffmpegPath) {
+            throw "Could not locate ffmpeg.exe inside the downloaded full build archive."
           }
 
           New-Item -ItemType Directory -Force -Path vendor/ffmpeg | Out-Null
