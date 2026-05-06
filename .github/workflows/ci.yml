@@ -33,5 +33,8 @@ jobs:
       - name: Build renderer
         run: npm run build:renderer
 
+      - name: Run TypeScript checks
+        run: npx tsc --noEmit
+
       - name: Verify release asset paths
         run: npm run verify:release

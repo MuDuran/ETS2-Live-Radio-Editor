@@ -26,6 +26,12 @@ Instead of manually editing `live_streams.sii`, searching for direct stream URLs
 - system tray support on Windows
 - accessibility and appearance customization
 
+### First use
+
+On the first use of the app, click `Import from ETS2` before making other changes.
+
+This initial import loads the radios that already exist in the game's current `live_streams.sii` file into the app, so the visual list starts from the real ETS2 state instead of an empty or outdated local list.
+
 ### ffmpeg dependency
 
 This project depends on `ffmpeg` to relay radio audio into ETS2.
@@ -50,6 +56,8 @@ Official project:
   Desktop process, preload bridge, environment checks, relay control, tray integration.
 - `src/`
   React interface, styling, translations, and user flows.
+- `shared/`
+  Shared data consumed by more than one layer, especially translations.
 - `assets/`
   Icons and visual assets used by the app.
 - `vendor/ffmpeg/`
@@ -104,15 +112,15 @@ Current Windows build targets:
 This repository includes two GitHub Actions workflows:
 
 - `CI`
-  Runs on pushes to `main` and on pull requests. It installs dependencies, checks the main Electron files, and builds the renderer.
+  Runs on pushes to `main` and on pull requests. It installs dependencies, checks the main Electron files, builds the renderer, and runs TypeScript validation.
 - `Release`
-  Runs on Windows when you push a tag like `v0.1.0` or start it manually from GitHub Actions. It builds the app and publishes the generated `.exe` files in a GitHub Release.
+  Runs on Windows when you push a tag like `v0.2.0` or start it manually from GitHub Actions. It builds the app and publishes the generated `.exe` files in a GitHub Release.
 
 Release steps at a high level:
 
 1. update the version in `package.json`
 2. commit the final changes
-3. create and push a tag like `v0.1.0`
+3. create and push a tag like `v0.2.0`
 4. wait for the Release workflow to finish
 
 Detailed release notes and manual test reminders are available in [docs/release-checklist.md](docs/release-checklist.md).
@@ -157,6 +165,12 @@ Em vez de editar o `live_streams.sii` manualmente, procurar links diretos de str
 - suporte a bandeja do sistema no Windows
 - acessibilidade e personalização visual
 
+### Primeiro uso
+
+No primeiro uso do aplicativo, clique em `Import from ETS2` antes de fazer outras alterações.
+
+Essa importação inicial carrega para o app as rádios que já existem no arquivo `live_streams.sii` atual do jogo, para que a lista visual comece a partir do estado real do ETS2, e não de uma lista vazia ou desatualizada.
+
 ### Dependência do ffmpeg
 
 Este projeto depende do `ffmpeg` para entregar o áudio das rádios ao ETS2.
@@ -181,6 +195,8 @@ Projeto oficial:
   Processo principal do desktop, preload, checagens de ambiente, controle dos relays e integração com tray.
 - `src/`
   Interface React, estilos, traduções e fluxos de uso.
+- `shared/`
+  Dados compartilhados entre mais de uma camada, especialmente traduções.
 - `assets/`
   Ícones e recursos visuais usados pelo app.
 - `vendor/ffmpeg/`
@@ -235,15 +251,15 @@ Atualmente o build do Windows gera:
 Este repositório agora inclui duas workflows do GitHub Actions:
 
 - `CI`
-  Roda em pushes para `main` e em pull requests. Ela instala as dependências, valida os arquivos principais do Electron e gera o build do renderer.
+  Roda em pushes para `main` e em pull requests. Ela instala as dependências, valida os arquivos principais do Electron, gera o build do renderer e roda a validação de TypeScript.
 - `Release`
-  Roda no Windows quando você envia uma tag como `v0.1.0` ou dispara manualmente pelo GitHub Actions. Ela gera o app e publica os arquivos `.exe` em uma GitHub Release.
+  Roda no Windows quando você envia uma tag como `v0.2.0` ou dispara manualmente pelo GitHub Actions. Ela gera o app e publica os arquivos `.exe` em uma GitHub Release.
 
 Fluxo de release em alto nível:
 
 1. atualizar a versão no `package.json`
 2. fazer o commit final
-3. criar e enviar uma tag como `v0.1.0`
+3. criar e enviar uma tag como `v0.2.0`
 4. aguardar a workflow `Release` terminar
 
 Os detalhes da publicação e a checklist de testes manuais estão em [docs/release-checklist.md](docs/release-checklist.md).

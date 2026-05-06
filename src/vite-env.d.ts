@@ -46,9 +46,7 @@ declare global {
       addStation: (payload: Station) => Promise<BackendResponse>;
       updateStation: (index: number, payload: Station) => Promise<BackendResponse>;
       deleteStations: (names: string[]) => Promise<BackendResponse>;
-      saveStations: () => Promise<BackendResponse>;
       importETS2: () => Promise<BackendResponse>;
-      syncETS2: () => Promise<BackendResponse>;
       startRelays: () => Promise<BackendResponse>;
       stopRelays: () => Promise<BackendResponse>;
     };

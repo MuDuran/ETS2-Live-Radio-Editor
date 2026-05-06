@@ -14,6 +14,7 @@ const {
 } = require("./radio-service.cjs");
 const { getCatalogFilters, searchStations, verifyStreamUrl } = require("./radio-browser-service.cjs");
 const { RelayService } = require("./relay-service.cjs");
+const { version: appVersion } = require("../package.json");
 const translationPayload = require("../shared/translations.json");
 const APP_USER_MODEL_ID = "com.muduran.ets2-live-radio-editor";
 
@@ -297,9 +298,10 @@ function showMainWindow() {
 function updateTrayMenu() {
   if (!tray) return;
 
-  const visibilityKey = mainWindow && !mainWindow.isDestroyed() && mainWindow.isVisible() ? "tray_status_visible" : "tray_status_hidden";
+  const visibilityKey =
+    mainWindow && !mainWindow.isDestroyed() && mainWindow.isVisible() ? "tray_status_visible" : "tray_status_hidden";
 
-  tray.setToolTip(`ET2 Radio Relays • ${translateMain(summaryRelayLabel())}`);
+  tray.setToolTip(`ET2 Radio Relays ${appVersion} • ${translateMain(summaryRelayLabel())}`);
   tray.setContextMenu(
     Menu.buildFromTemplate([
       {
@@ -510,16 +512,6 @@ function registerIpc() {
     );
   });
 
-  ipcMain.handle("app:save-stations", () => {
-    storage.writeStations(stations);
-    return {
-      ok: true,
-      path: storage.stationsPath,
-      messageKey: "helper_saved",
-      vars: { name: "stations.json" },
-    };
-  });
-
   ipcMain.handle("app:import-ets2", () => {
     const result = importFromETS2(settings.ets2Dir, stations, mainLogger);
     if (!result.ok) return result;
@@ -533,16 +525,6 @@ function registerIpc() {
       telemetry: getTelemetryPayload(),
       messageKey: "helper_imported_count",
       vars: { count: stations.length, name: "stations.json" },
-    };
-  });
-
-  ipcMain.handle("app:sync-ets2", () => {
-    const result = syncToETS2(settings.ets2Dir, stations, mainLogger);
-    if (!result.ok) return result;
-    return {
-      ok: true,
-      path: result.path,
-      messageKey: "helper_synced",
     };
   });
 

@@ -1,5 +1,6 @@
 const RADIO_BROWSER_BASE = "https://de1.api.radio-browser.info";
-const USER_AGENT = "ETS2LiveRadioEditor/0.1.0";
+const { version: appVersion } = require("../package.json");
+const USER_AGENT = `ETS2LiveRadioEditor/${appVersion}`;
 const REQUEST_TIMEOUT_MS = 10000;
 const regionNames = typeof Intl !== "undefined" && Intl.DisplayNames ? new Intl.DisplayNames(["en"], { type: "region" }) : null;
 

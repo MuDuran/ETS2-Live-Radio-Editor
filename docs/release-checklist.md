@@ -22,7 +22,7 @@ Use this checklist before publishing a new version of the app.
    The GitHub Release workflow prepares this file automatically before packaging.
 5. Review `README.md` if features, installation steps, or build targets changed.
 6. Commit the final changes.
-7. Create and push a tag like `v0.1.0`.
+7. Create and push a tag like `v0.2.0`.
 8. Let GitHub Actions publish the Release and attach the `.exe` files.
 
 ## Português do Brasil
@@ -47,5 +47,5 @@ Use esta checklist antes de publicar uma nova versão do app.
    A workflow de Release do GitHub prepara esse arquivo automaticamente antes do empacotamento.
 5. Revise o `README.md` se recursos, instalação ou tipos de build mudarem.
 6. Faça o commit final das mudanças.
-7. Crie e envie uma tag como `v0.1.0`.
+7. Crie e envie uma tag como `v0.2.0`.
 8. Deixe o GitHub Actions publicar a Release e anexar os arquivos `.exe`.
