@@ -254,6 +254,10 @@ function rgba(hex: string, alpha: number) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
+function stationKey(station: Station) {
+  return `${station.name}::${station.port}`;
+}
+
 function buildThemeVariables(theme: ThemeSettings) {
   const background = normalizeHex(theme.backgroundColor, DEFAULT_THEME.backgroundColor);
   const surface = normalizeHex(theme.surfaceColor, DEFAULT_THEME.surfaceColor);
@@ -360,6 +364,7 @@ export default function App() {
   const [statuses, setStatuses] = useState<Record<string, StatusEntry>>({});
   const [relayActionLoading, setRelayActionLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [checkedStationKeys, setCheckedStationKeys] = useState<string[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editorOpen, setEditorOpen] = useState(false);
   const [stationDraft, setStationDraft] = useState<Station>(EMPTY_STATION);
@@ -370,7 +375,7 @@ export default function App() {
   const [banner, setBanner] = useState<{ title: string; message: string; kind: "success" | "warning" | "info" } | null>(null);
   const [bannerLeaving, setBannerLeaving] = useState(false);
   const [infoDialog, setInfoDialog] = useState<{ title: string; message: string } | null>(null);
-  const [deleteDialog, setDeleteDialog] = useState<{ name: string } | null>(null);
+  const [deleteDialog, setDeleteDialog] = useState<{ count: number; names: string[] } | null>(null);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -541,11 +546,16 @@ export default function App() {
     return t("status_running_summary_idle", { total: summary.totalStations });
   }, [summary, telemetry, language]);
 
+  const checkedStations = useMemo(() => {
+    const keys = new Set(checkedStationKeys);
+    return stations.filter((station) => keys.has(stationKey(station)));
+  }, [checkedStationKeys, stations]);
+  const checkedCount = checkedStations.length;
   const selectedStation = selectedIndex === null ? null : stations[selectedIndex] ?? null;
   const selectedStatus = selectedStation ? statuses[selectedStation.name] : null;
   const selectedStatusText = selectedStatus ? t(selectedStatus.key, selectedStatus.vars) : t("status_ready");
   const relayStateLabel = summary?.relayEnabled ? t("relay_state_on") : t("relay_state_off");
-  const selectedCountLabel = t("selected_count", { count: selectedStation ? 1 : 0 });
+  const selectedCountLabel = t("selected_count", { count: checkedCount });
   const pageIndicator = t("page_indicator", { page: pageNumber, total: pageCount });
   const filteredCountLabel = t("station_count", { count: filteredStations.length });
   const editorModeLabel = editingIndex === null ? t("editor_mode_new") : t("editor_mode_edit");
@@ -572,6 +582,11 @@ export default function App() {
     setStationDraft(stations[selectedIndex]);
     setEditorOpen(true);
   }, [selectedIndex, stations]);
+
+  useEffect(() => {
+    const validKeys = new Set(stations.map((station) => stationKey(station)));
+    setCheckedStationKeys((current) => current.filter((key) => validKeys.has(key)));
+  }, [stations]);
 
   useEffect(() => {
     setPageNumber(1);
@@ -696,6 +711,27 @@ export default function App() {
     return sortDirection === "asc" ? "↑" : "↓";
   }
 
+  function toggleCheckedStation(key: string) {
+    setCheckedStationKeys((current) =>
+      current.includes(key) ? current.filter((entry) => entry !== key) : [...current, key]
+    );
+  }
+
+  function togglePageChecked(shouldCheck: boolean) {
+    const pageKeys = pagedStations.map(({ station }) => stationKey(station));
+    setCheckedStationKeys((current) => {
+      const currentSet = new Set(current);
+
+      if (shouldCheck) {
+        pageKeys.forEach((key) => currentSet.add(key));
+      } else {
+        pageKeys.forEach((key) => currentSet.delete(key));
+      }
+
+      return [...currentSet];
+    });
+  }
+
   function startNewRadio() {
     setView("radios");
     setSelectedIndex(null);
@@ -752,9 +788,10 @@ export default function App() {
   async function deleteSelectedStation() {
     if (!deleteDialog) return;
 
-    const result = await window.radioApi.deleteStations([deleteDialog.name]);
+    const result = await window.radioApi.deleteStations(deleteDialog.names);
     showResult(result);
     setDeleteDialog(null);
+    setCheckedStationKeys([]);
     if (result.stations && result.stations.length > 0) {
       setSelectedIndex(0);
     } else {
@@ -790,7 +827,11 @@ export default function App() {
 
       if (!result.ok) {
         setSearchUiState("error");
-        showResult(result);
+        showResult({
+          ok: false,
+          titleKey: result.titleKey,
+          messageKey: result.messageKey,
+        });
         return;
       }
 
@@ -860,6 +901,10 @@ export default function App() {
   if (!boot || !settings || !summary) {
     return <div className="loading-shell">Loading...</div>;
   }
+
+  const checkedKeySet = new Set(checkedStationKeys);
+  const pageKeys = pagedStations.map(({ station }) => stationKey(station));
+  const allPageChecked = pageKeys.length > 0 && pageKeys.every((key) => checkedKeySet.has(key));
 
   return (
     <div className="desktop-shell">
@@ -969,14 +1014,14 @@ export default function App() {
                 <button
                   className="toolbar-button danger"
                   onClick={() => {
-                    if (!selectedStation) {
-                      showResult({ ok: false, titleKey: "warn_nothing_selected_title", messageKey: "warn_nothing_selected_body" });
+                    if (!checkedCount) {
+                      showResult({ ok: false, titleKey: "warn_nothing_checked_title", messageKey: "warn_nothing_checked_body" });
                       return;
                     }
-                    setDeleteDialog({ name: selectedStation.name });
+                    setDeleteDialog({ count: checkedCount, names: checkedStations.map((station) => station.name) });
                   }}
                 >
-                  {t("delete_selected_button")}
+                  {t("remove_selected")}
                 </button>
               </div>
 
@@ -1016,6 +1061,14 @@ export default function App() {
                   <table className="radio-table">
                     <thead>
                       <tr>
+                        <th className="checkbox-cell">
+                          <input
+                            type="checkbox"
+                            aria-label={t("col_checked")}
+                            checked={allPageChecked}
+                            onChange={(event) => togglePageChecked(event.target.checked)}
+                          />
+                        </th>
                         <th>
                           <button className="sort-button" onClick={() => toggleSort("index")}>
                             # {sortIndicator("index")}
@@ -1050,13 +1103,22 @@ export default function App() {
                     </thead>
                     <tbody>
                       {pagedStations.map(({ station, index: originalIndex }, rowIndex) => {
-                        const selected = selectedIndex === originalIndex;
+                        const active = selectedIndex === originalIndex;
+                        const checked = checkedKeySet.has(stationKey(station));
                         return (
                           <tr
                             key={`${station.name}-${station.port}`}
-                            className={selected ? "selected-row" : undefined}
+                            className={[active ? "selected-row" : "", checked ? "checked-row" : ""].filter(Boolean).join(" ") || undefined}
                             onClick={() => setSelectedIndex(originalIndex)}
                           >
+                            <td className="checkbox-cell" onClick={(event) => event.stopPropagation()}>
+                              <input
+                                type="checkbox"
+                                aria-label={`${t("col_checked")} ${station.name}`}
+                                checked={checked}
+                                onChange={() => toggleCheckedStation(stationKey(station))}
+                              />
+                            </td>
                             <td>{(pageNumber - 1) * PAGE_SIZE + rowIndex + 1}</td>
                             <td className="station-name-cell">
                               <strong>{station.name}</strong>
@@ -1676,8 +1738,8 @@ export default function App() {
       {deleteDialog && (
         <div className="overlay" onClick={() => setDeleteDialog(null)}>
           <div className="info-modal confirm-modal" onClick={(event) => event.stopPropagation()}>
-            <h3>{t("confirm_delete_single_title")}</h3>
-            <p>{t("confirm_delete_single_body", { name: deleteDialog.name })}</p>
+            <h3>{t("confirm_delete_title")}</h3>
+            <p>{t("confirm_delete_body", { count: deleteDialog.count })}</p>
             <div className="modal-actions confirm-actions">
               <button className="editor-cancel" onClick={() => setDeleteDialog(null)}>
                 {t("cancel_button")}

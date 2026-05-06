@@ -767,6 +767,14 @@ svg {
   box-shadow: inset 3px 0 0 var(--row-selected-accent);
 }
 
+.radio-table tbody tr.checked-row {
+  background: rgba(25, 195, 192, 0.08);
+}
+
+.radio-table tbody tr.checked-row.selected-row {
+  background: var(--row-selected);
+}
+
 .radio-table td {
   padding: 12px 10px;
   color: var(--text);
@@ -780,6 +788,11 @@ svg {
 
 .radio-table input[type="checkbox"] {
   accent-color: var(--accent);
+}
+
+.checkbox-cell {
+  width: 42px;
+  text-align: center;
 }
 
 .station-name-cell strong {

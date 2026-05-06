@@ -13,7 +13,7 @@ export function translate(language: string, key: string, vars: Record<string, st
   const fallback = translations.en ?? {};
   const raw = dictionary[key] ?? fallback[key] ?? key;
   return Object.entries(vars).reduce(
-    (message, [token, value]) => message.replaceAll(`{${token}}`, String(value)),
+    (message, [token, value]) => message.split(`{${token}}`).join(String(value)),
     raw
   );
 }

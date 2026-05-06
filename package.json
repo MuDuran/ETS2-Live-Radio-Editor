@@ -1,6 +1,6 @@
 {
   "name": "ets2-live-radio-editor",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Desktop app to manage ETS2 live radios with local ffmpeg relays.",
   "main": "electron/main.cjs",
   "author": "Murilo Duran",
@@ -46,7 +46,7 @@
         "portable",
         "nsis"
       ],
-      "signAndEditExecutable": false
+      "signAndEditExecutable": true
     },
     "nsis": {
       "oneClick": false,
