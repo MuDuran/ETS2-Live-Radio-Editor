@@ -72,6 +72,15 @@ cd "C:\Users\muril\Documents\ET2-Radio-Relays"
 npm run build
 ```
 
+For GitHub release packaging, the project uses:
+
+```powershell
+cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+npm run build:release
+```
+
+This command is important because it forces `electron-builder` to package with `--publish never`, leaving GitHub Release publishing to the workflow step that uploads the `.exe` files.
+
 The release build now includes an extra safety validation step before packaging:
 
 - it verifies that `dist/index.html` uses relative asset paths such as `./assets/...`
@@ -193,6 +202,15 @@ npm run dev
 cd "C:\Users\muril\Documents\ET2-Radio-Relays"
 npm run build
 ```
+
+Para empacotamento de release no GitHub, o projeto usa:
+
+```powershell
+cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+npm run build:release
+```
+
+Esse comando e importante porque força o `electron-builder` a empacotar com `--publish never`, deixando a publicacao da GitHub Release para a etapa da workflow que anexa os arquivos `.exe`.
 
 O build de release agora inclui uma validação extra antes do empacotamento:
 

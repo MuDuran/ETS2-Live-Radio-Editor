@@ -9,6 +9,7 @@ Use this checklist before publishing a new version of the app.
    - `npm run build:renderer`
    - `npm run verify:release`
    - `npm run build`
+   - `npm run build:release`
 3. Open the generated app and test:
    - welcome flow
    - radio search
@@ -33,6 +34,7 @@ Use esta checklist antes de publicar uma nova versão do app.
    - `npm run build:renderer`
    - `npm run verify:release`
    - `npm run build`
+   - `npm run build:release`
 3. Abra o app gerado e teste:
    - fluxo de boas-vindas
    - busca de rádios
