@@ -13,7 +13,7 @@ const {
 } = require("./radio-service.cjs");
 const { getCatalogFilters, searchStations, verifyStreamUrl } = require("./radio-browser-service.cjs");
 const { RelayService } = require("./relay-service.cjs");
-const translationPayload = require("../src/i18n/translations.json");
+const translationPayload = require("../shared/translations.json");
 
 let mainWindow = null;
 let storage = null;

@@ -1,4 +1,4 @@
-import payload from "./translations.json";
+import payload from "../../shared/translations.json";
 
 type TranslationMap = Record<string, string>;
 type LanguageMap = Record<string, string>;
