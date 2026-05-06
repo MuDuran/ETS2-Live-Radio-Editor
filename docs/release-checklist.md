@@ -7,6 +7,7 @@ Use this checklist before publishing a new version of the app.
 1. Update the version in `package.json`.
 2. Run local validation:
    - `npm run build:renderer`
+   - `npm run verify:release`
    - `npm run build`
 3. Open the generated app and test:
    - welcome flow
@@ -30,6 +31,7 @@ Use esta checklist antes de publicar uma nova versão do app.
 1. Atualize a versão em `package.json`.
 2. Rode a validação local:
    - `npm run build:renderer`
+   - `npm run verify:release`
    - `npm run build`
 3. Abra o app gerado e teste:
    - fluxo de boas-vindas

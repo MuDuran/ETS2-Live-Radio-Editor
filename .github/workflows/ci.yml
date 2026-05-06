@@ -32,3 +32,6 @@ jobs:
 
       - name: Build renderer
         run: npm run build:renderer
+
+      - name: Verify release asset paths
+        run: npm run verify:release

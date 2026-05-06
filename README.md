@@ -72,6 +72,19 @@ cd "C:\Users\muril\Documents\ET2-Radio-Relays"
 npm run build
 ```
 
+The release build now includes an extra safety validation step before packaging:
+
+- it verifies that `dist/index.html` uses relative asset paths such as `./assets/...`
+- it verifies that every referenced local asset exists
+- it rejects remote Google Fonts references in the packaged renderer
+
+You can run only this validation with:
+
+```powershell
+cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+npm run verify:release
+```
+
 Current Windows build targets:
 
 - `portable` `.exe`
@@ -179,6 +192,19 @@ npm run dev
 ```powershell
 cd "C:\Users\muril\Documents\ET2-Radio-Relays"
 npm run build
+```
+
+O build de release agora inclui uma validação extra antes do empacotamento:
+
+- verifica se o `dist/index.html` usa caminhos relativos como `./assets/...`
+- verifica se todos os assets locais referenciados realmente existem
+- bloqueia referências remotas ao Google Fonts no renderer empacotado
+
+Se quiser rodar só essa verificação, use:
+
+```powershell
+cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+npm run verify:release
 ```
 
 Atualmente o build do Windows gera:
