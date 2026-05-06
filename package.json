@@ -14,6 +14,7 @@
   "build": {
     "appId": "com.muduran.ets2-live-radio-editor",
     "productName": "ETS2 Live Radio Editor",
+    "icon": "assets/icons/ETS2-Radio-Relay-Logo.ico",
     "directories": {
       "output": "dist-electron"
     },
@@ -25,12 +26,26 @@
       "assets/**/*",
       "package.json"
     ],
+    "extraResources": [
+      {
+        "from": "vendor",
+        "to": "vendor"
+      }
+    ],
     "extraMetadata": {
       "main": "electron/main.cjs"
     },
     "win": {
-      "target": "portable",
+      "icon": "assets/icons/ETS2-Radio-Relay-Logo.ico",
+      "target": [
+        "portable",
+        "nsis"
+      ],
       "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "devDependencies": {

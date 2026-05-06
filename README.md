@@ -1,20 +1,63 @@
 # ETS2 Live Radio Editor
 
-Ferramenta desktop para:
+English below. Português do Brasil logo depois.
 
-- gerenciar a lista de radios do Euro Truck
-- sincronizar o `live_streams.sii`
-- iniciar relays locais com `ffmpeg`
-- distribuir um app visualmente mais proximo de um produto desktop moderno
+## English
 
-## Stack atual
+### What this project is
+
+ETS2 Live Radio Editor is a desktop application built to make custom internet radio management easier for **Euro Truck Simulator 2** players.
+
+Instead of manually editing `live_streams.sii`, searching for direct stream URLs by hand, or configuring local relays in a technical way, the app gives you a visual workflow for:
+
+- searching online radios from a catalog
+- adding radios manually when needed
+- syncing the radio list to ETS2 automatically
+- delivering radio audio to the game through local `ffmpeg` relays
+
+### Main features
+
+- Electron desktop app with a React + TypeScript interface
+- radio catalog search and assisted add flow
+- automatic `live_streams.sii` sync after add, edit, and delete
+- on-demand relay architecture to reduce CPU and memory spikes
+- bundled `ffmpeg` for distribution builds
+- environment diagnostics for ETS2 and `ffmpeg`
+- system tray support on Windows
+- accessibility and appearance customization
+
+### ffmpeg dependency
+
+This project depends on `ffmpeg` to relay radio audio into ETS2.
+
+- In packaged Windows builds, `ffmpeg` is bundled with the app during the release process.
+- In local development, the app can still use a system installation such as `C:\FFMpeg\bin\ffmpeg.exe` if needed.
+
+Official project:
+- [FFmpeg official website](https://ffmpeg.org/)
+
+### Tech stack
 
 - `Electron`
 - `React`
 - `TypeScript`
 - `Vite`
+- `electron-builder`
 
-## Como rodar em desenvolvimento
+### Project structure
+
+- `electron/`
+  Desktop process, preload bridge, environment checks, relay control, tray integration.
+- `src/`
+  React interface, styling, translations, and user flows.
+- `assets/`
+  Icons and visual assets used by the app.
+- `vendor/ffmpeg/`
+  Bundled `ffmpeg` used in packaged builds.
+- `review-log-2026-05-05.md`
+  Technical review history with problems, risks, fixes, and validation notes.
+
+### Development
 
 ```powershell
 cd "C:\Users\muril\Documents\ET2-Radio-Relays"
@@ -22,21 +65,155 @@ npm install
 npm run dev
 ```
 
-## Como gerar build
+### Build for distribution
 
 ```powershell
 cd "C:\Users\muril\Documents\ET2-Radio-Relays"
 npm run build
 ```
 
-## Estrutura principal
+Current Windows build targets:
 
-- `electron/`: processo principal, preload e logica desktop
-- `src/`: interface React
-- `stations.json`: base de radios
-- `settings.json`: preferencias locais
-- `review-log-2026-05-05.md`: registro das revisoes tecnicas
+- `portable` `.exe`
+- `nsis` installer `.exe`
 
-## Observacao importante
+### GitHub automation
 
-O app usa `ffmpeg` para transformar streams em um formato mais amigavel para o ETS2. Por isso, ao usar radios no jogo, o app precisa ficar aberto enquanto os relays estiverem ativos.
+This repository includes two GitHub Actions workflows:
+
+- `CI`
+  Runs on pushes to `main` and on pull requests. It installs dependencies, checks the main Electron files, and builds the renderer.
+- `Release`
+  Runs on Windows when you push a tag like `v0.1.0` or start it manually from GitHub Actions. It builds the app and publishes the generated `.exe` files in a GitHub Release.
+
+Release steps at a high level:
+
+1. update the version in `package.json`
+2. commit the final changes
+3. create and push a tag like `v0.1.0`
+4. wait for the Release workflow to finish
+
+Detailed release notes and manual test reminders are available in [docs/release-checklist.md](docs/release-checklist.md).
+
+### Important note
+
+The game can only play the custom radios while this app is running, because the local relay layer stays active in the background and feeds the audio to ETS2.
+
+### Current product direction
+
+This project is being shaped as a more polished desktop tool for ETS2 players, with focus on:
+
+- easier radio discovery
+- less manual configuration
+- better performance
+- clearer diagnostics
+- a more professional desktop UX
+
+---
+
+## Português do Brasil
+
+### O que é este projeto
+
+O ETS2 Live Radio Editor é um aplicativo desktop criado para facilitar o gerenciamento de rádios online personalizadas no **Euro Truck Simulator 2**.
+
+Em vez de editar o `live_streams.sii` manualmente, procurar links diretos de stream por conta própria ou configurar relays locais de forma técnica, o app oferece um fluxo visual para:
+
+- buscar rádios online em um catálogo
+- adicionar rádios manualmente quando necessário
+- sincronizar a lista com o ETS2 automaticamente
+- entregar o áudio ao jogo usando relays locais com `ffmpeg`
+
+### Principais recursos
+
+- aplicativo desktop em Electron com interface React + TypeScript
+- busca de rádios por catálogo com fluxo guiado
+- sincronização automática do `live_streams.sii` ao adicionar, editar e excluir
+- arquitetura de relay sob demanda para reduzir picos de CPU e memória
+- `ffmpeg` embarcado nas builds de distribuição
+- diagnóstico de ambiente para ETS2 e `ffmpeg`
+- suporte a bandeja do sistema no Windows
+- acessibilidade e personalização visual
+
+### Dependência do ffmpeg
+
+Este projeto depende do `ffmpeg` para entregar o áudio das rádios ao ETS2.
+
+- Nas builds empacotadas para Windows, o `ffmpeg` é incluído no app durante o processo de release.
+- No desenvolvimento local, o app também pode usar uma instalação do sistema, como `C:\FFMpeg\bin\ffmpeg.exe`, quando necessário.
+
+Projeto oficial:
+- [Site oficial do FFmpeg](https://ffmpeg.org/)
+
+### Stack técnica
+
+- `Electron`
+- `React`
+- `TypeScript`
+- `Vite`
+- `electron-builder`
+
+### Estrutura do projeto
+
+- `electron/`
+  Processo principal do desktop, preload, checagens de ambiente, controle dos relays e integração com tray.
+- `src/`
+  Interface React, estilos, traduções e fluxos de uso.
+- `assets/`
+  Ícones e recursos visuais usados pelo app.
+- `vendor/ffmpeg/`
+  `ffmpeg` embarcado usado nas builds empacotadas.
+- `review-log-2026-05-05.md`
+  Histórico técnico das revisões com problemas, riscos, correções e validações.
+
+### Como rodar em desenvolvimento
+
+```powershell
+cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+npm install
+npm run dev
+```
+
+### Como gerar build para distribuição
+
+```powershell
+cd "C:\Users\muril\Documents\ET2-Radio-Relays"
+npm run build
+```
+
+Atualmente o build do Windows gera:
+
+- `.exe` portátil
+- instalador `.exe` via NSIS
+
+### Automação no GitHub
+
+Este repositório agora inclui duas workflows do GitHub Actions:
+
+- `CI`
+  Roda em pushes para `main` e em pull requests. Ela instala as dependências, valida os arquivos principais do Electron e gera o build do renderer.
+- `Release`
+  Roda no Windows quando você envia uma tag como `v0.1.0` ou dispara manualmente pelo GitHub Actions. Ela gera o app e publica os arquivos `.exe` em uma GitHub Release.
+
+Fluxo de release em alto nível:
+
+1. atualizar a versão no `package.json`
+2. fazer o commit final
+3. criar e enviar uma tag como `v0.1.0`
+4. aguardar a workflow `Release` terminar
+
+Os detalhes da publicação e a checklist de testes manuais estão em [docs/release-checklist.md](docs/release-checklist.md).
+
+### Observação importante
+
+O jogo só consegue tocar as rádios personalizadas enquanto este app estiver aberto, porque a camada de relay local continua ativa em segundo plano e entrega o áudio ao ETS2.
+
+### Direção atual do produto
+
+Este projeto está sendo moldado como uma ferramenta desktop mais polida para jogadores de ETS2, com foco em:
+
+- descoberta mais fácil de rádios
+- menos configuração manual
+- melhor performance
+- diagnósticos mais claros
+- experiência de desktop mais profissional

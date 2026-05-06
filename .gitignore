@@ -8,3 +8,7 @@ __pycache__/
 *.pyo
 *.pyd
 Thumbs.db
+contexto-atual-do-software.md
+.DS_Store
+assets/icons/proposals/
+vendor/ffmpeg/ffmpeg.exe
