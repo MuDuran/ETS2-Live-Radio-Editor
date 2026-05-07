@@ -1,12 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { supportedLanguages, translate } from "./i18n";
 import paypalBadgeUrl from "../assets/icons/BUTAODOMAJOR2.png";
+import atsCardImageUrl from "../assets/ATS.jpg";
+import ets2CardImageUrl from "../assets/ETS2.jpg";
+import rawGameProfiles from "../shared/gameProfiles.json";
 import type {
   AppSettings,
   BackendResponse,
   BootstrapPayload,
   CatalogStation,
   EnvironmentReport,
+  GameId,
+  GameProfile,
   SearchOption,
   Station,
   StatusEntry,
@@ -30,6 +35,17 @@ type NoticePayload = {
   summary?: Summary;
   environment?: EnvironmentReport;
   telemetry?: TelemetrySnapshot;
+};
+
+type SettingsPatch = Partial<Omit<AppSettings, "gameDirs" | "theme">> & {
+  gameDirs?: Partial<Record<GameId, string>>;
+  theme?: Partial<ThemeSettings>;
+};
+
+const GAME_PROFILES = rawGameProfiles as Record<GameId, GameProfile>;
+const GAME_CARD_IMAGES: Record<GameId, string> = {
+  ets2: ets2CardImageUrl,
+  ats: atsCardImageUrl,
 };
 
 const PAGE_SIZE = 10;
@@ -259,6 +275,14 @@ function stationKey(station: Station) {
   return `${station.name}::${station.port}`;
 }
 
+function normalizeCatalogMatchValue(value: string) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function getGameProfile(gameId: GameId) {
+  return GAME_PROFILES[gameId] ?? GAME_PROFILES.ets2;
+}
+
 function buildThemeVariables(theme: ThemeSettings) {
   const background = normalizeHex(theme.backgroundColor, DEFAULT_THEME.backgroundColor);
   const surface = normalizeHex(theme.surfaceColor, DEFAULT_THEME.surfaceColor);
@@ -389,6 +413,8 @@ export default function App() {
   const [infoDialog, setInfoDialog] = useState<{ title: string; message: string } | null>(null);
   const [deleteDialog, setDeleteDialog] = useState<{ count: number; names: string[] } | null>(null);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
+  const [gameSessionModalOpen, setGameSessionModalOpen] = useState(false);
+  const [sessionGameSelection, setSessionGameSelection] = useState<GameId>("ets2");
   const [helpOpen, setHelpOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -416,6 +442,8 @@ export default function App() {
       setTelemetry(payload.telemetry);
       setStatuses(Object.fromEntries(payload.statuses.map((entry) => [entry.name, entry])));
       setWelcomeOpen(!payload.settings.hasCompletedWelcome);
+      setSessionGameSelection(payload.settings.lastSelectedGame ?? payload.settings.activeGame);
+      setGameSessionModalOpen(true);
       if (payload.stations.length > 0) {
         setSelectedIndex(0);
         setEditingIndex(0);
@@ -499,6 +527,33 @@ export default function App() {
   const t = (key: string, vars?: Record<string, string | number>) => translate(language, key, vars);
   const currentTheme = settings?.theme ?? DEFAULT_THEME;
   const showTelemetry = settings?.showTelemetry ?? true;
+  const activeGameId = settings?.activeGame ?? "ets2";
+  const activeGameProfile = getGameProfile(activeGameId);
+  const gameVars = {
+    gameName: activeGameProfile.name,
+    gameShortName: activeGameProfile.shortName,
+  };
+  const currentGameDir = settings?.gameDirs?.[activeGameId] ?? "";
+  const availableGames = environment?.games ?? {
+    ets2: {
+      id: "ets2" as GameId,
+      name: GAME_PROFILES.ets2.name,
+      shortName: GAME_PROFILES.ets2.shortName,
+      path: settings?.gameDirs?.ets2 ?? "",
+      folderExists: false,
+      liveStreamsPath: "",
+      liveStreamsExists: false,
+    },
+    ats: {
+      id: "ats" as GameId,
+      name: GAME_PROFILES.ats.name,
+      shortName: GAME_PROFILES.ats.shortName,
+      path: settings?.gameDirs?.ats ?? "",
+      folderExists: false,
+      liveStreamsPath: "",
+      liveStreamsExists: false,
+    },
+  };
 
   const filteredStations = useMemo(() => {
     const normalized = searchTerm.trim().toLowerCase();
@@ -564,6 +619,16 @@ export default function App() {
     const keys = new Set(checkedStationKeys);
     return stations.filter((station) => keys.has(stationKey(station)));
   }, [checkedStationKeys, stations]);
+  const existingCatalogKeys = useMemo(
+    () =>
+      new Set(
+        stations.flatMap((station) => [
+          `${normalizeCatalogMatchValue(station.name)}::${normalizeCatalogMatchValue(station.source)}`,
+          normalizeCatalogMatchValue(station.source),
+        ])
+      ),
+    [stations]
+  );
   const checkedCount = checkedStations.length;
   const selectedStation = selectedIndex === null ? null : stations[selectedIndex] ?? null;
   const selectedStatus = selectedStation ? statuses[selectedStation.name] : null;
@@ -578,9 +643,13 @@ export default function App() {
   const editorBadgeLabel = editingIndex === null ? t("editor_badge_new") : t("editor_badge_edit");
   const searchHasFilters = Boolean(searchQuery.trim() || searchCountryCode || searchLanguageFilter || searchTag);
   const environmentChecking = !environment;
-  const environmentReady = Boolean(environment?.ets2.liveStreamsExists && environment?.ffmpeg.exists);
+  const environmentReady = Boolean(environment?.game.liveStreamsExists && environment?.ffmpeg.exists);
   const environmentHeadline = environmentChecking ? t("env_status_checking") : environmentReady ? t("env_status_ready") : t("env_status_attention");
-  const environmentBody = environmentChecking ? t("env_checking_body") : environmentReady ? t("env_ready_body") : t("env_attention_body");
+  const environmentBody = environmentChecking
+    ? t("env_checking_body", gameVars)
+    : environmentReady
+      ? t("env_ready_body", gameVars)
+      : t("env_attention_body", gameVars);
   const telemetryMemoryLabel = telemetry ? t("telemetry_memory_value", { value: telemetry.mainMemoryMb }) : t("telemetry_pending_value");
   const telemetryStartupLabel = telemetry?.startupInProgress
     ? t("telemetry_starting_value", { count: telemetry.startingRelays, total: telemetry.totalStations })
@@ -589,13 +658,7 @@ export default function App() {
       : summary?.relayEnabled
         ? t("telemetry_armed_value", { count: summary.preparedRelays })
         : t("telemetry_waiting_value");
-
-  useEffect(() => {
-    if (selectedIndex === null || !stations[selectedIndex]) return;
-    setEditingIndex(selectedIndex);
-    setStationDraft(stations[selectedIndex]);
-    setEditorOpen(true);
-  }, [selectedIndex, stations]);
+  const isGameSwitchBlocked = Boolean(summary?.relayEnabled || telemetry?.startupInProgress);
 
   useEffect(() => {
     const validKeys = new Set(stations.map((station) => stationKey(station)));
@@ -634,8 +697,9 @@ export default function App() {
 
   function showResult(result: NoticePayload) {
     patchFromResponse(result);
-    const title = result.titleKey ? t(result.titleKey, result.vars) : result.ok ? t("saved_title") : t("import_error_title");
-    const message = result.messageKey ? t(result.messageKey, result.vars) : result.path ?? "";
+    const translationVars = { ...gameVars, ...(result.vars || {}) };
+    const title = result.titleKey ? t(result.titleKey, translationVars) : result.ok ? t("saved_title") : t("import_error_title");
+    const message = result.messageKey ? t(result.messageKey, translationVars) : result.path ?? "";
     setBannerLeaving(false);
     setBanner({ title, message, kind: result.ok ? "success" : "warning" });
   }
@@ -658,12 +722,34 @@ export default function App() {
     setSearchModalOpen(true);
   }
 
-  async function saveSettings(patch: Partial<AppSettings>) {
-    const next = { ...settings!, ...patch };
+  async function saveSettings(patch: SettingsPatch) {
+    const next = {
+      ...settings!,
+      ...patch,
+      gameDirs: patch.gameDirs ? { ...settings!.gameDirs, ...patch.gameDirs } : settings!.gameDirs,
+      theme: patch.theme ? { ...settings!.theme, ...patch.theme } : settings!.theme,
+    };
     setSettings(next);
     const result = await window.radioApi.saveSettings(patch);
     setSettings(result.settings);
+    patchFromResponse(result);
     setEnvironment(result.environment);
+
+    if (patch.activeGame && result.stations) {
+      if (result.stations.length > 0) {
+        setSelectedIndex(0);
+        setEditingIndex(0);
+        setStationDraft(result.stations[0]);
+      } else {
+        setSelectedIndex(null);
+        setEditingIndex(null);
+        setStationDraft({ ...EMPTY_STATION, port: result.summary?.nextPort ?? 18100 });
+      }
+      setCheckedStationKeys([]);
+      setEditorOpen(false);
+      setSearchTerm("");
+      setPageNumber(1);
+    }
   }
 
   function previewTheme(patch: Partial<ThemeSettings>) {
@@ -754,6 +840,21 @@ export default function App() {
     setEditorOpen(true);
   }
 
+  function openSelectedRadioEditor() {
+    if (selectedIndex === null || !stations[selectedIndex]) {
+      showResult({
+        ok: false,
+        titleKey: "warn_nothing_selected_title",
+        messageKey: "warn_nothing_selected_body",
+      });
+      return;
+    }
+
+    setEditingIndex(selectedIndex);
+    setStationDraft(stations[selectedIndex]);
+    setEditorOpen(true);
+  }
+
   async function addCatalogStation(station: CatalogStation) {
     const stationToAdd = {
       name: station.name,
@@ -776,7 +877,6 @@ export default function App() {
         setStationDraft(result.stations[newIndex]);
       }
       setEditorOpen(true);
-      setSearchModalOpen(false);
     }
   }
 
@@ -787,8 +887,15 @@ export default function App() {
         : await window.radioApi.updateStation(editingIndex, stationDraft);
     showResult(result);
     if (result.stations && editingIndex === null) {
-      const newIndex = result.stations.findIndex((item) => item.name === stationDraft.name && item.port === stationDraft.port);
-      setSelectedIndex(newIndex >= 0 ? newIndex : 0);
+      setSelectedIndex(null);
+      setEditingIndex(null);
+      setStationDraft({
+        ...EMPTY_STATION,
+        port: result.summary?.nextPort ?? summary?.nextPort ?? stationDraft.port + 1,
+        favorite: false,
+      });
+      setEditorOpen(true);
+      return;
     }
     setEditorOpen(true);
   }
@@ -876,13 +983,44 @@ export default function App() {
     showResult(result);
   }
 
-  async function importFromETS2() {
-    const result = await window.radioApi.importETS2();
+  async function importFromGame() {
+    const result = await window.radioApi.importGame();
     showResult(result);
     if (result.ok) {
       setSelectedIndex(0);
       setEditorOpen(false);
     }
+  }
+
+  async function changeActiveGame(nextGame: GameId) {
+    if (!settings || nextGame === settings.activeGame) return;
+
+    if (isGameSwitchBlocked) {
+      showResult({
+        ok: false,
+        titleKey: "game_switch_blocked_title",
+        messageKey: "game_switch_blocked_body",
+        vars: gameVars,
+      });
+      return;
+    }
+
+    await saveSettings({
+      activeGame: nextGame,
+      lastSelectedGame: nextGame,
+    });
+  }
+
+  async function confirmSessionGame() {
+    if (!settings) return;
+
+    if (sessionGameSelection !== settings.activeGame) {
+      await changeActiveGame(sessionGameSelection);
+    } else {
+      await saveSettings({ lastSelectedGame: sessionGameSelection });
+    }
+
+    setGameSessionModalOpen(false);
   }
 
   async function startRelays() {
@@ -1048,8 +1186,11 @@ export default function App() {
                 <button className="toolbar-button" onClick={startNewRadio}>
                   + {t("manual_add_button")}
                 </button>
-                <button className="toolbar-button" onClick={importFromETS2}>
-                  {t("import_from_ets2")}
+                <button className="toolbar-button" onClick={openSelectedRadioEditor}>
+                  {t("load_form")}
+                </button>
+                <button className="toolbar-button" onClick={importFromGame}>
+                  {t("import_from_game", gameVars)}
                 </button>
                 <button
                   className="toolbar-button danger"
@@ -1169,7 +1310,7 @@ export default function App() {
                                 type="button"
                                 className={`favorite-star-button ${station.favorite ? "active" : ""}`}
                                 aria-label={station.favorite ? t("favorite_toggle_off", { name: station.name }) : t("favorite_toggle_on", { name: station.name })}
-                                title={station.favorite ? t("favorite_state_on") : t("favorite_state_off")}
+                          title={station.favorite ? t("favorite_state_on", gameVars) : t("favorite_state_off", gameVars)}
                                 onClick={() => void toggleStationFavorite(originalIndex)}
                               >
                                 <FavoriteStarIcon filled={station.favorite} />
@@ -1201,11 +1342,17 @@ export default function App() {
                 <span>{selectedCountLabel}</span>
                 <span>{pageIndicator}</span>
                 <div className="pagination-controls">
+                  <button className="page-button" disabled={pageNumber === 1} onClick={() => setPageNumber(1)}>
+                    {t("pagination_first")}
+                  </button>
                   <button className="page-button" disabled={pageNumber === 1} onClick={() => setPageNumber((current) => Math.max(1, current - 1))}>
                     {t("pagination_prev")}
                   </button>
                   <button className="page-button" disabled={pageNumber === pageCount} onClick={() => setPageNumber((current) => Math.min(pageCount, current + 1))}>
                     {t("pagination_next")}
+                  </button>
+                  <button className="page-button" disabled={pageNumber === pageCount} onClick={() => setPageNumber(pageCount)}>
+                    {t("pagination_last")}
                   </button>
                 </div>
                 <strong>{runtimeSummary}</strong>
@@ -1252,8 +1399,8 @@ export default function App() {
                       </span>
                       <span className="favorite-toggle-copy">
                         <strong>{t("field_favorite")}</strong>
-                        <small>{stationDraft.favorite ? t("favorite_state_on") : t("favorite_state_off")}</small>
-                        <small>{t("field_favorite_help")}</small>
+                      <small>{stationDraft.favorite ? t("favorite_state_on", gameVars) : t("favorite_state_off", gameVars)}</small>
+                      <small>{t("field_favorite_help", gameVars)}</small>
                       </span>
                     </button>
 
@@ -1343,17 +1490,42 @@ export default function App() {
               <div className="settings-section">
                 <div className="section-head compact">
                   <h3>{t("config_title")}</h3>
-                  <button className="circle-tool" onClick={() => openInfo(t("config_info_title"), t("config_info_body"))}>
+                  <button className="circle-tool" onClick={() => openInfo(t("config_info_title"), t("config_info_body", gameVars))}>
                     i
                   </button>
                 </div>
 
                 <label className="support-field">
-                  <span>{t("ets2_dir")}</span>
+                  <span>{t("settings_active_game_label")}</span>
+                  <select value={settings.activeGame} onChange={(event) => void changeActiveGame(event.target.value as GameId)}>
+                    {Object.values(GAME_PROFILES).map((profile) => (
+                      <option key={profile.id} value={profile.id}>
+                        {profile.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="support-field">
+                  <span>{t("game_dir", gameVars)}</span>
                   <input
-                    value={settings.ets2Dir}
-                    onChange={(event) => setSettings({ ...settings, ets2Dir: event.target.value })}
-                    onBlur={() => saveSettings({ ets2Dir: settings.ets2Dir })}
+                    value={currentGameDir}
+                    onChange={(event) =>
+                      setSettings({
+                        ...settings,
+                        gameDirs: {
+                          ...settings.gameDirs,
+                          [settings.activeGame]: event.target.value,
+                        },
+                      })
+                    }
+                    onBlur={() =>
+                      saveSettings({
+                        gameDirs: {
+                          [settings.activeGame]: currentGameDir,
+                        },
+                      })
+                    }
                   />
                 </label>
 
@@ -1376,17 +1548,17 @@ export default function App() {
 
                 <div className="settings-diagnostics">
                   <div className="diagnostic-item">
-                    <span>{t("settings_ets2_status_label")}</span>
+                    <span>{t("settings_game_status_label", gameVars)}</span>
                     <strong>
                       {environmentChecking
                         ? t("env_checking_short")
-                        : environment?.ets2.liveStreamsExists
+                        : environment?.game.liveStreamsExists
                           ? t("env_check_ready")
-                          : environment?.ets2.folderExists
+                          : environment?.game.folderExists
                             ? t("env_check_partial")
                             : t("env_check_missing")}
                     </strong>
-                    <small>{environment?.ets2.liveStreamsPath ?? settings.ets2Dir}</small>
+                    <small>{environment?.game.liveStreamsPath ?? currentGameDir}</small>
                   </div>
                   <div className="diagnostic-item">
                     <span>{t("settings_ffmpeg_status_label")}</span>
@@ -1567,11 +1739,11 @@ export default function App() {
                       t("help_fields_3"),
                       t("help_fields_4"),
                       t("help_fields_5"),
-                      t("help_fields_6"),
+                      t("help_fields_6", gameVars),
                       "",
-                      t("help_title_sync"),
-                      t("help_sync_1"),
-                      t("help_sync_2"),
+                      t("help_title_sync", gameVars),
+                      t("help_sync_1", gameVars),
+                      t("help_sync_2", gameVars),
                     ].join("\n")}
                   </pre>
                 )}
@@ -1609,6 +1781,62 @@ export default function App() {
                 }}
               >
                 {t("continue_button")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!welcomeOpen && gameSessionModalOpen && (
+        <div className="overlay">
+          <div className="welcome-modal game-session-modal" onClick={(event) => event.stopPropagation()}>
+            <p className="eyebrow">{t("game_session_kicker")}</p>
+            <h2>{t("game_session_title")}</h2>
+            <p className="game-session-copy">{t("game_session_body")}</p>
+
+            <div className="game-session-grid">
+              {Object.values(GAME_PROFILES).map((profile) => {
+                const selected = sessionGameSelection === profile.id;
+                const lastUsed = settings.lastSelectedGame === profile.id;
+                const gameAvailability = availableGames[profile.id];
+                const gameDetected = Boolean(gameAvailability?.folderExists || gameAvailability?.liveStreamsExists);
+
+                return (
+                  <button
+                    key={profile.id}
+                    type="button"
+                    className={[
+                      "game-session-card",
+                      selected ? "active" : "",
+                      gameDetected ? "" : "disabled",
+                    ].filter(Boolean).join(" ")}
+                    onClick={() => {
+                      if (!gameDetected) return;
+                      setSessionGameSelection(profile.id);
+                    }}
+                    disabled={!gameDetected}
+                  >
+                    <div
+                      className={`game-session-art ${profile.id}`}
+                      style={{ backgroundImage: `url(${GAME_CARD_IMAGES[profile.id]})` }}
+                    >
+                      <span className="game-session-short">{profile.shortName}</span>
+                    </div>
+                    <div className="game-session-card-body">
+                      <div className="game-session-card-head">
+                        <strong>{profile.name}</strong>
+                        {lastUsed && <span className="game-session-badge">{t("game_session_last_used")}</span>}
+                      </div>
+                      {!gameDetected && <small className="game-session-disabled-note">{t("game_session_unavailable")}</small>}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="modal-actions game-session-actions">
+              <button className="editor-save" onClick={() => void confirmSessionGame()}>
+                {t("game_session_continue")}
               </button>
             </div>
           </div>
@@ -1735,8 +1963,13 @@ export default function App() {
                 </div>
               ) : catalogResults.length > 0 ? (
                 <div className="catalog-results">
-                  {catalogResults.map((station) => (
-                    <article key={station.stationUuid} className="catalog-card">
+                  {catalogResults.map((station) => {
+                    const stationMatchKey = `${normalizeCatalogMatchValue(station.name)}::${normalizeCatalogMatchValue(station.streamUrl)}`;
+                    const alreadyAdded =
+                      existingCatalogKeys.has(stationMatchKey) || existingCatalogKeys.has(normalizeCatalogMatchValue(station.streamUrl));
+
+                    return (
+                    <article key={station.stationUuid} className={alreadyAdded ? "catalog-card already-added" : "catalog-card"}>
                       <div className="catalog-card-head">
                         <div>
                           <strong>{station.name}</strong>
@@ -1763,12 +1996,17 @@ export default function App() {
                         >
                           {t("search_open_site_button")}
                         </button>
-                        <button className="toolbar-button primary" onClick={() => addCatalogStation(station)}>
-                          {t("search_add_button")}
+                        <button
+                          className={alreadyAdded ? "toolbar-button catalog-added-button" : "toolbar-button primary"}
+                          onClick={() => addCatalogStation(station)}
+                          disabled={alreadyAdded}
+                        >
+                          {alreadyAdded ? t("search_added_button") : t("search_add_button")}
                         </button>
                       </div>
                     </article>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : searchUiState === "error" ? (
                 <div className="empty-state compact">

@@ -1,7 +1,7 @@
 {
   "name": "ets2-live-radio-editor",
-  "version": "0.2.2",
-  "description": "Desktop app to manage ETS2 live radios with local ffmpeg relays.",
+  "version": "0.3.0",
+  "description": "Desktop app to manage ETS2 and ATS live radios with local ffmpeg relays.",
   "main": "electron/main.cjs",
   "author": "Murilo Duran",
   "license": "MIT",
@@ -17,7 +17,7 @@
   },
   "build": {
     "appId": "com.muduran.ets2-live-radio-editor",
-    "productName": "ETS2 Live Radio Editor",
+    "productName": "ETS2 and ATS Live Radio Editor",
     "icon": "assets/icons/ETS2-Radio-Relay-Logo.ico",
     "directories": {
       "output": "dist-electron"
@@ -26,8 +26,6 @@
       "dist/**/*",
       "electron/**/*",
       "shared/**/*",
-      "stations.json",
-      "settings.json",
       "assets/**/*",
       "package.json"
     ],

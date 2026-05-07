@@ -4,6 +4,11 @@ const path = require("node:path");
 const STREAM_LINE_PATTERN = /^\s*stream_data\[(\d+)\]: "(.*)"\s*$/;
 const GAME_STREAM_HOST = "localhost";
 const LOCAL_RELAY_URL_PATTERN = /^http:\/\/(?:127\.0\.0\.1|localhost):/i;
+const { GAME_PROFILES, DEFAULT_GAME } = require("./constants.cjs");
+
+function getGameProfile(gameId = DEFAULT_GAME) {
+  return GAME_PROFILES[gameId] || GAME_PROFILES[DEFAULT_GAME];
+}
 
 function normalizeStation(payload) {
   return {
@@ -73,12 +78,21 @@ function validateStation(station, stations, originalName = null) {
   return { ok: true };
 }
 
-function importFromETS2(ets2Dir, currentStations, logger = null) {
-  const liveStreamsPath = path.join(ets2Dir, "live_streams.sii");
-  logger?.info("Import requested from ETS2", { ets2Dir, liveStreamsPath });
+function importFromGame(gameId, gameDir, currentStations, logger = null) {
+  const profile = getGameProfile(gameId);
+  const liveStreamsPath = path.join(gameDir, "live_streams.sii");
+  logger?.info("Import requested from game", {
+    gameId: profile.id,
+    gameName: profile.name,
+    gameDir,
+    liveStreamsPath,
+  });
 
   if (!fs.existsSync(liveStreamsPath)) {
-    logger?.warn("ETS2 import failed because live_streams.sii was not found", { liveStreamsPath });
+    logger?.warn("Game import failed because live_streams.sii was not found", {
+      gameId: profile.id,
+      liveStreamsPath,
+    });
     return {
       ok: false,
       titleKey: "import_error_title",
@@ -110,7 +124,10 @@ function importFromETS2(ets2Dir, currentStations, logger = null) {
   }
 
   if (!imported.length) {
-    logger?.warn("ETS2 import found no valid stations", { liveStreamsPath });
+    logger?.warn("Game import found no valid stations", {
+      gameId: profile.id,
+      liveStreamsPath,
+    });
     return {
       ok: false,
       titleKey: "import_error_title",
@@ -118,7 +135,9 @@ function importFromETS2(ets2Dir, currentStations, logger = null) {
     };
   }
 
-  logger?.info("ETS2 import completed", {
+  logger?.info("Game import completed", {
+    gameId: profile.id,
+    gameName: profile.name,
     liveStreamsPath,
     stationCount: imported.length,
   });
@@ -126,17 +145,23 @@ function importFromETS2(ets2Dir, currentStations, logger = null) {
   return { ok: true, stations: imported };
 }
 
-function syncToETS2(ets2Dir, stations, logger = null) {
-  const liveStreamsPath = path.join(ets2Dir, "live_streams.sii");
-  const backupPath = path.join(ets2Dir, "live_streams.gui-backup.sii");
-  logger?.info("ETS2 sync requested", {
-    ets2Dir,
+function syncToGame(gameId, gameDir, stations, logger = null) {
+  const profile = getGameProfile(gameId);
+  const liveStreamsPath = path.join(gameDir, "live_streams.sii");
+  const backupPath = path.join(gameDir, "live_streams.gui-backup.sii");
+  logger?.info("Game sync requested", {
+    gameId: profile.id,
+    gameName: profile.name,
+    gameDir,
     liveStreamsPath,
     stationCount: stations.length,
   });
 
   if (!fs.existsSync(liveStreamsPath)) {
-    logger?.warn("ETS2 sync failed because live_streams.sii was not found", { liveStreamsPath });
+    logger?.warn("Game sync failed because live_streams.sii was not found", {
+      gameId: profile.id,
+      liveStreamsPath,
+    });
     return {
       ok: false,
       titleKey: "sync_error_title",
@@ -147,7 +172,10 @@ function syncToETS2(ets2Dir, stations, logger = null) {
 
   if (!fs.existsSync(backupPath)) {
     fs.copyFileSync(liveStreamsPath, backupPath);
-    logger?.info("ETS2 backup created", { backupPath });
+    logger?.info("Game backup created", {
+      gameId: profile.id,
+      backupPath,
+    });
   }
 
   const lines = [
@@ -169,7 +197,9 @@ function syncToETS2(ets2Dir, stations, logger = null) {
   lines.push("}");
 
   fs.writeFileSync(liveStreamsPath, lines.join("\n") + "\n", "utf-8");
-  logger?.info("ETS2 sync completed", {
+  logger?.info("Game sync completed", {
+    gameId: profile.id,
+    gameName: profile.name,
     liveStreamsPath,
     backupPath,
     stationCount: stations.length,
@@ -186,7 +216,7 @@ module.exports = {
   normalizeStation,
   suggestNextPort,
   validateStation,
-  importFromETS2,
-  syncToETS2,
+  importFromGame,
+  syncToGame,
   GAME_STREAM_HOST,
 };

@@ -1,4 +1,4 @@
-# ETS2 Live Radio Editor
+# ETS2 and ATS Live Radio Editor
 
 English below. Português do Brasil logo depois.
 
@@ -6,13 +6,13 @@ English below. Português do Brasil logo depois.
 
 ### What this project is
 
-ETS2 Live Radio Editor is a desktop application built to make custom internet radio management easier for **Euro Truck Simulator 2** players.
+ETS2 and ATS Live Radio Editor is a desktop application built to make custom internet radio management easier for **Euro Truck Simulator 2** and **American Truck Simulator** players.
 
 Instead of manually editing `live_streams.sii`, searching for direct stream URLs by hand, or configuring local relays in a technical way, the app gives you a visual workflow for:
 
 - searching online radios from a catalog
 - adding radios manually when needed
-- syncing the radio list to ETS2 automatically
+- syncing the radio list to the selected game automatically
 - delivering radio audio to the game through local `ffmpeg` relays
 
 ### Main features
@@ -22,19 +22,19 @@ Instead of manually editing `live_streams.sii`, searching for direct stream URLs
 - automatic `live_streams.sii` sync after add, edit, and delete
 - on-demand relay architecture to reduce CPU and memory spikes
 - bundled `ffmpeg` for distribution builds
-- environment diagnostics for ETS2 and `ffmpeg`
+- environment diagnostics for ETS2, ATS, and `ffmpeg`
 - system tray support on Windows
 - accessibility and appearance customization
 
 ### First use
 
-On the first use of the app, click `Import from ETS2` before making other changes.
+On the first use of the app, choose the game for the current session and then click `Import from <game>` before making other changes.
 
-This initial import loads the radios that already exist in the game's current `live_streams.sii` file into the app, so the visual list starts from the real ETS2 state instead of an empty or outdated local list.
+This initial import loads the radios that already exist in the selected game's current `live_streams.sii` file into the app, so the visual list starts from the real ETS2 or ATS state instead of an empty or outdated local list.
 
 ### ffmpeg dependency
 
-This project depends on `ffmpeg` to relay radio audio into ETS2.
+This project depends on `ffmpeg` to relay radio audio into ETS2 or ATS.
 
 - In packaged Windows builds, `ffmpeg` is bundled with the app during the release process.
 - In local development, the app can still use a system installation such as `C:\ffmpeg\bin\ffmpeg.exe` if needed.
@@ -57,7 +57,7 @@ Official project:
 - `src/`
   React interface, styling, translations, and user flows.
 - `shared/`
-  Shared data consumed by more than one layer, especially translations.
+  Shared data consumed by more than one layer, especially translations and game profiles.
 - `assets/`
   Icons and visual assets used by the app.
 - `vendor/ffmpeg/`
@@ -127,11 +127,11 @@ Detailed release notes and manual test reminders are available in [docs/release-
 
 ### Important note
 
-The game can only play the custom radios while this app is running, because the local relay layer stays active in the background and feeds the audio to ETS2.
+The selected game can only play the custom radios while this app is running, because the local relay layer stays active in the background and feeds the audio to ETS2 or ATS.
 
 ### Current product direction
 
-This project is being shaped as a more polished desktop tool for ETS2 players, with focus on:
+This project is being shaped as a more polished desktop tool for ETS2 and ATS players, with focus on:
 
 - easier radio discovery
 - less manual configuration
@@ -145,13 +145,13 @@ This project is being shaped as a more polished desktop tool for ETS2 players, w
 
 ### O que é este projeto
 
-O ETS2 Live Radio Editor é um aplicativo desktop criado para facilitar o gerenciamento de rádios online personalizadas no **Euro Truck Simulator 2**.
+O ETS2 e ATS Live Radio Editor é um aplicativo desktop criado para facilitar o gerenciamento de rádios online personalizadas no **Euro Truck Simulator 2** e no **American Truck Simulator**.
 
 Em vez de editar o `live_streams.sii` manualmente, procurar links diretos de stream por conta própria ou configurar relays locais de forma técnica, o app oferece um fluxo visual para:
 
 - buscar rádios online em um catálogo
 - adicionar rádios manualmente quando necessário
-- sincronizar a lista com o ETS2 automaticamente
+- sincronizar a lista com o jogo selecionado automaticamente
 - entregar o áudio ao jogo usando relays locais com `ffmpeg`
 
 ### Principais recursos
@@ -161,19 +161,19 @@ Em vez de editar o `live_streams.sii` manualmente, procurar links diretos de str
 - sincronização automática do `live_streams.sii` ao adicionar, editar e excluir
 - arquitetura de relay sob demanda para reduzir picos de CPU e memória
 - `ffmpeg` embarcado nas builds de distribuição
-- diagnóstico de ambiente para ETS2 e `ffmpeg`
+- diagnóstico de ambiente para ETS2, ATS e `ffmpeg`
 - suporte a bandeja do sistema no Windows
 - acessibilidade e personalização visual
 
 ### Primeiro uso
 
-No primeiro uso do aplicativo, clique em `Import from ETS2` antes de fazer outras alterações.
+No primeiro uso do aplicativo, escolha o jogo da sessão e clique em `Import from <jogo>` antes de fazer outras alterações.
 
-Essa importação inicial carrega para o app as rádios que já existem no arquivo `live_streams.sii` atual do jogo, para que a lista visual comece a partir do estado real do ETS2, e não de uma lista vazia ou desatualizada.
+Essa importação inicial carrega para o app as rádios que já existem no arquivo `live_streams.sii` atual do jogo escolhido, para que a lista visual comece a partir do estado real do ETS2 ou ATS, e não de uma lista vazia ou desatualizada.
 
 ### Dependência do ffmpeg
 
-Este projeto depende do `ffmpeg` para entregar o áudio das rádios ao ETS2.
+Este projeto depende do `ffmpeg` para entregar o áudio das rádios ao ETS2 ou ATS.
 
 - Nas builds empacotadas para Windows, o `ffmpeg` é incluído no app durante o processo de release.
 - No desenvolvimento local, o app também pode usar uma instalação do sistema, como `C:\ffmpeg\bin\ffmpeg.exe`, quando necessário.
@@ -196,7 +196,7 @@ Projeto oficial:
 - `src/`
   Interface React, estilos, traduções e fluxos de uso.
 - `shared/`
-  Dados compartilhados entre mais de uma camada, especialmente traduções.
+  Dados compartilhados entre mais de uma camada, especialmente traduções e perfis dos jogos.
 - `assets/`
   Ícones e recursos visuais usados pelo app.
 - `vendor/ffmpeg/`
@@ -266,11 +266,11 @@ Os detalhes da publicação e a checklist de testes manuais estão em [docs/rele
 
 ### Observação importante
 
-O jogo só consegue tocar as rádios personalizadas enquanto este app estiver aberto, porque a camada de relay local continua ativa em segundo plano e entrega o áudio ao ETS2.
+O jogo selecionado só consegue tocar as rádios personalizadas enquanto este app estiver aberto, porque a camada de relay local continua ativa em segundo plano e entrega o áudio ao ETS2 ou ATS.
 
 ### Direção atual do produto
 
-Este projeto está sendo moldado como uma ferramenta desktop mais polida para jogadores de ETS2, com foco em:
+Este projeto está sendo moldado como uma ferramenta desktop mais polida para jogadores de ETS2 e ATS, com foco em:
 
 - descoberta mais fácil de rádios
 - menos configuração manual

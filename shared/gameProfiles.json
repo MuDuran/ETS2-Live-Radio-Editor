@@ -1,0 +1,14 @@
+{
+  "ets2": {
+    "id": "ets2",
+    "name": "Euro Truck Simulator 2",
+    "shortName": "ETS2",
+    "documentsFolderName": "Euro Truck Simulator 2"
+  },
+  "ats": {
+    "id": "ats",
+    "name": "American Truck Simulator",
+    "shortName": "ATS",
+    "documentsFolderName": "American Truck Simulator"
+  }
+}

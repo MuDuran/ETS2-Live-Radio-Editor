@@ -1,3 +1,12 @@
+export type GameId = "ets2" | "ats";
+
+export type GameProfile = {
+  id: GameId;
+  name: string;
+  shortName: string;
+  documentsFolderName: string;
+};
+
 export type Station = {
   name: string;
   genre: string;
@@ -22,7 +31,9 @@ export type ThemeSettings = {
 
 export type AppSettings = {
   language: string;
-  ets2Dir: string;
+  activeGame: GameId;
+  lastSelectedGame: GameId;
+  gameDirs: Record<GameId, string>;
   ffmpegPath: string;
   hasCompletedWelcome: boolean;
   showTelemetry: boolean;
@@ -30,13 +41,25 @@ export type AppSettings = {
 };
 
 export type EnvironmentReport = {
-  ets2: {
+  game: {
+    id: GameId;
+    name: string;
+    shortName: string;
     path: string;
     folderExists: boolean;
     liveStreamsPath: string;
     liveStreamsExists: boolean;
     autoDetected: boolean;
   };
+  games: Record<GameId, {
+    id: GameId;
+    name: string;
+    shortName: string;
+    path: string;
+    folderExists: boolean;
+    liveStreamsPath: string;
+    liveStreamsExists: boolean;
+  }>;
   ffmpeg: {
     path: string;
     exists: boolean;

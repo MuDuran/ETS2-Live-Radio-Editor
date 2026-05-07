@@ -4,6 +4,7 @@ import type {
   BackendResponse,
   BootstrapPayload,
   EnvironmentReport,
+  GameId,
   SearchFiltersPayload,
   SearchStationsPayload,
   Station,
@@ -25,28 +26,36 @@ declare global {
       saveSettings: (
         partial: Partial<{
           language: string;
-          ets2Dir: string;
+          activeGame: GameId;
+          lastSelectedGame: GameId;
+          gameDirs: Partial<Record<GameId, string>>;
           ffmpegPath: string;
           hasCompletedWelcome: boolean;
           showTelemetry: boolean;
-          theme: ThemeSettings;
+          theme: Partial<ThemeSettings>;
         }>
       ) => Promise<{
         ok: boolean;
         settings: {
           language: string;
-          ets2Dir: string;
+          activeGame: GameId;
+          lastSelectedGame: GameId;
+          gameDirs: Record<GameId, string>;
           ffmpegPath: string;
           hasCompletedWelcome: boolean;
           showTelemetry: boolean;
           theme: ThemeSettings;
         };
         environment: EnvironmentReport;
+        stations?: Station[];
+        statuses?: StatusEntry[];
+        summary?: Summary;
+        telemetry?: TelemetrySnapshot;
       }>;
       addStation: (payload: Station) => Promise<BackendResponse>;
       updateStation: (index: number, payload: Station) => Promise<BackendResponse>;
       deleteStations: (names: string[]) => Promise<BackendResponse>;
-      importETS2: () => Promise<BackendResponse>;
+      importGame: () => Promise<BackendResponse>;
       startRelays: () => Promise<BackendResponse>;
       stopRelays: () => Promise<BackendResponse>;
     };

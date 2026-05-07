@@ -4,13 +4,13 @@ const { execFileSync } = require("node:child_process");
 const { app, BrowserWindow, ipcMain, Menu, Tray, nativeImage, shell } = require("electron");
 const { createStorage } = require("./storage.cjs");
 const { createLogger } = require("./logger.cjs");
-const { DEFAULT_ETS2_DIR, DEFAULT_FFMPEG, BUNDLED_FFMPEG } = require("./constants.cjs");
+const { DEFAULT_GAME, DEFAULT_GAME_DIRECTORIES, DEFAULT_FFMPEG, BUNDLED_FFMPEG, GAME_PROFILES } = require("./constants.cjs");
 const {
   normalizeStation,
   suggestNextPort,
   validateStation,
-  importFromETS2,
-  syncToETS2,
+  importFromGame,
+  syncToGame,
 } = require("./radio-service.cjs");
 const { getCatalogFilters, searchStations, verifyStreamUrl } = require("./radio-browser-service.cjs");
 const { RelayService } = require("./relay-service.cjs");
@@ -61,6 +61,45 @@ function getSummaryPayload() {
   };
 }
 
+function getGameProfile(gameId = DEFAULT_GAME) {
+  return GAME_PROFILES[gameId] || GAME_PROFILES[DEFAULT_GAME];
+}
+
+function getCurrentGameId(currentSettings = settings) {
+  return currentSettings?.activeGame || DEFAULT_GAME;
+}
+
+function getCurrentGameDir(currentSettings = settings) {
+  const gameId = getCurrentGameId(currentSettings);
+  return currentSettings?.gameDirs?.[gameId] || DEFAULT_GAME_DIRECTORIES[gameId];
+}
+
+function detectGameAvailability(currentSettings, gameId) {
+  const documentsDir = app.getPath("documents");
+  const profile = getGameProfile(gameId);
+  const configuredDir = currentSettings?.gameDirs?.[gameId] || DEFAULT_GAME_DIRECTORIES[gameId];
+  const candidates = [
+    configuredDir,
+    path.join(documentsDir, profile.documentsFolderName),
+    DEFAULT_GAME_DIRECTORIES[gameId],
+    path.join(process.env.USERPROFILE || "", "OneDrive", "Documents", profile.documentsFolderName),
+  ];
+  const resolvedDir = findFirstExisting(candidates, (candidate) => fs.existsSync(candidate) && fs.statSync(candidate).isDirectory());
+  const finalDir = resolvedDir || configuredDir || DEFAULT_GAME_DIRECTORIES[gameId];
+  const liveStreamsPath = path.join(finalDir, "live_streams.sii");
+
+  return {
+    id: profile.id,
+    name: profile.name,
+    shortName: profile.shortName,
+    path: finalDir,
+    folderExists: Boolean(resolvedDir),
+    liveStreamsPath,
+    liveStreamsExists: fs.existsSync(liveStreamsPath),
+    autoDetected: Boolean(resolvedDir && resolvedDir !== configuredDir),
+  };
+}
+
 function uniquePaths(paths) {
   return [...new Set(paths.filter((candidate) => typeof candidate === "string" && candidate.trim()))];
 }
@@ -92,16 +131,13 @@ function readFfmpegFromPath() {
 }
 
 function detectEnvironment(currentSettings) {
-  const documentsDir = app.getPath("documents");
-  const ets2Candidates = [
-    currentSettings.ets2Dir,
-    path.join(documentsDir, "Euro Truck Simulator 2"),
-    DEFAULT_ETS2_DIR,
-    path.join(process.env.USERPROFILE || "", "OneDrive", "Documents", "Euro Truck Simulator 2"),
-  ];
-  const resolvedEts2Dir = findFirstExisting(ets2Candidates, (candidate) => fs.existsSync(candidate) && fs.statSync(candidate).isDirectory());
-  const finalEts2Dir = resolvedEts2Dir || currentSettings.ets2Dir || DEFAULT_ETS2_DIR;
-  const liveStreamsPath = path.join(finalEts2Dir, "live_streams.sii");
+  const activeGameId = getCurrentGameId(currentSettings);
+  const activeGameState = detectGameAvailability(currentSettings, activeGameId);
+  const currentGameDir = getCurrentGameDir(currentSettings);
+  const games = {
+    ets2: detectGameAvailability(currentSettings, "ets2"),
+    ats: detectGameAvailability(currentSettings, "ats"),
+  };
 
   const ffmpegCandidates = [
     BUNDLED_FFMPEG,
@@ -117,13 +153,8 @@ function detectEnvironment(currentSettings) {
 
   return {
     environment: {
-      ets2: {
-        path: finalEts2Dir,
-        folderExists: Boolean(resolvedEts2Dir),
-        liveStreamsPath,
-        liveStreamsExists: fs.existsSync(liveStreamsPath),
-        autoDetected: Boolean(resolvedEts2Dir && resolvedEts2Dir !== currentSettings.ets2Dir),
-      },
+      game: activeGameState,
+      games,
       ffmpeg: {
         path: finalFfmpegPath,
         exists: Boolean(resolvedFfmpegPath),
@@ -131,7 +162,7 @@ function detectEnvironment(currentSettings) {
       },
     },
     autoPatch: {
-      ets2Dir: resolvedEts2Dir && resolvedEts2Dir !== currentSettings.ets2Dir ? resolvedEts2Dir : null,
+      gameDir: activeGameState.autoDetected && activeGameState.path !== currentGameDir ? activeGameState.path : null,
       ffmpegPath: resolvedFfmpegPath && resolvedFfmpegPath !== currentSettings.ffmpegPath ? resolvedFfmpegPath : null,
     },
   };
@@ -141,8 +172,10 @@ function refreshEnvironmentState() {
   const detection = detectEnvironment(settings);
   const patch = {};
 
-  if (detection.autoPatch.ets2Dir) {
-    patch.ets2Dir = detection.autoPatch.ets2Dir;
+  if (detection.autoPatch.gameDir) {
+    patch.gameDirs = {
+      [getCurrentGameId(settings)]: detection.autoPatch.gameDir,
+    };
   }
 
   if (detection.autoPatch.ffmpegPath) {
@@ -152,9 +185,9 @@ function refreshEnvironmentState() {
   if (Object.keys(patch).length > 0) {
     persistSettings(patch);
     environment = {
-      ets2: {
-        ...detection.environment.ets2,
-        path: settings.ets2Dir,
+      game: {
+        ...detection.environment.game,
+        path: getCurrentGameDir(settings),
       },
       ffmpeg: {
         ...detection.environment.ffmpeg,
@@ -197,15 +230,23 @@ function getTelemetryPayload() {
   };
 }
 
+function readStationsForCurrentGame() {
+  return storage.readStations(getCurrentGameId(settings)).map((station) => normalizeStation(station));
+}
+
 function persistStations(nextStations) {
   stations = nextStations;
-  storage.writeStations(stations);
+  storage.writeStations(getCurrentGameId(settings), stations);
 }
 
 function persistSettings(nextSettings) {
   settings = {
     ...settings,
     ...nextSettings,
+    gameDirs: {
+      ...settings.gameDirs,
+      ...(nextSettings.gameDirs || {}),
+    },
     theme: {
       ...settings.theme,
       ...(nextSettings.theme || {}),
@@ -215,12 +256,22 @@ function persistSettings(nextSettings) {
   updateTrayMenu();
 }
 
+function rebuildSelectionState() {
+  return {
+    stations,
+    statuses: getStatusPayload(),
+    summary: getSummaryPayload(),
+    environment,
+    telemetry: getTelemetryPayload(),
+  };
+}
+
 function buildStationMutationResponse(nextStations, successMessageKey, vars = {}) {
   persistStations(nextStations);
-  const syncResult = syncToETS2(settings.ets2Dir, stations, mainLogger);
+  const syncResult = syncToGame(getCurrentGameId(settings), getCurrentGameDir(settings), stations, mainLogger);
 
   if (!syncResult.ok) {
-    mainLogger?.warn("Station mutation saved locally but ETS2 sync failed", {
+    mainLogger?.warn("Station mutation saved locally but game sync failed", {
       successMessageKey,
       stationCount: stations.length,
       path: syncResult.vars?.path || syncResult.path || "",
@@ -238,7 +289,7 @@ function buildStationMutationResponse(nextStations, successMessageKey, vars = {}
     };
   }
 
-  mainLogger?.info("Station mutation and ETS2 sync completed", {
+  mainLogger?.info("Station mutation and game sync completed", {
     successMessageKey,
     stationCount: stations.length,
     path: syncResult.path,
@@ -301,7 +352,7 @@ function updateTrayMenu() {
   const visibilityKey =
     mainWindow && !mainWindow.isDestroyed() && mainWindow.isVisible() ? "tray_status_visible" : "tray_status_hidden";
 
-  tray.setToolTip(`ET2 Radio Relays ${appVersion} • ${translateMain(summaryRelayLabel())}`);
+  tray.setToolTip(`ETS2 and ATS Live Radio Editor ${appVersion} • ${translateMain(summaryRelayLabel())}`);
   tray.setContextMenu(
     Menu.buildFromTemplate([
       {
@@ -385,21 +436,22 @@ function bootstrapState() {
   storage = createStorage();
   mainLogger = createLogger(path.join(storage.logsDir, "main.log"), "main");
   relayService = new RelayService(storage, createLogger(path.join(storage.logsDir, "relay.log"), "relay"));
-  const storedStations = storage.readStations();
-  stations = storedStations.map((station) => normalizeStation(station));
   settings = storage.readSettings();
+  const storedStations = storage.readStations(getCurrentGameId(settings));
+  stations = storedStations.map((station) => normalizeStation(station));
   refreshEnvironmentState();
   mainLogger.info("Application bootstrap complete", {
     stationCount: stations.length,
     userDataDir: storage.dataDir,
     logsDir: storage.logsDir,
-    ets2Dir: settings.ets2Dir,
+    activeGame: settings.activeGame,
+    gameDir: getCurrentGameDir(settings),
     ffmpegPath: settings.ffmpegPath,
   });
 
   const needsStationMigration = JSON.stringify(storedStations) !== JSON.stringify(stations);
   if (needsStationMigration) {
-    storage.writeStations(stations);
+    storage.writeStations(getCurrentGameId(settings), stations);
   }
 }
 
@@ -407,13 +459,10 @@ function registerIpc() {
   ipcMain.handle("app:get-bootstrap", () => {
     const currentEnvironment = refreshEnvironmentState();
     return {
-      settings,
-      stations,
-      statuses: getStatusPayload(),
-      summary: getSummaryPayload(),
-      environment: currentEnvironment,
-      telemetry: getTelemetryPayload(),
-    };
+    settings,
+    ...rebuildSelectionState(),
+    environment: currentEnvironment,
+  };
   });
 
   ipcMain.handle("app:get-runtime-state", () => {
@@ -470,14 +519,47 @@ function registerIpc() {
   });
 
   ipcMain.handle("app:save-settings", (_event, partial) => {
+    const previousGameId = getCurrentGameId(settings);
+    const requestedGameId = partial?.activeGame;
+
+    if (
+      requestedGameId &&
+      requestedGameId !== previousGameId &&
+      (relayService.isEnabled() || relayService.getMetrics().startupInProgress)
+    ) {
+      return {
+        ok: false,
+        titleKey: "game_switch_blocked_title",
+        messageKey: "game_switch_blocked_body",
+        vars: {
+          gameShortName: getGameProfile(previousGameId).shortName,
+        },
+        settings,
+        environment,
+        ...rebuildSelectionState(),
+      };
+    }
+
     persistSettings(partial);
     const nextEnvironment = refreshEnvironmentState();
+    const nextGameId = getCurrentGameId(settings);
+
+    if (nextGameId !== previousGameId) {
+      stations = readStationsForCurrentGame();
+    }
+
     mainLogger?.info("Settings updated", {
       changedKeys: Object.keys(partial || {}),
-      ets2Dir: settings.ets2Dir,
+      activeGame: settings.activeGame,
+      gameDir: getCurrentGameDir(settings),
       ffmpegPath: settings.ffmpegPath,
     });
-    return { ok: true, settings, environment: nextEnvironment };
+    return {
+      ok: true,
+      settings,
+      environment: nextEnvironment,
+      ...rebuildSelectionState(),
+    };
   });
 
   ipcMain.handle("app:add-station", (_event, payload) => {
@@ -512,8 +594,8 @@ function registerIpc() {
     );
   });
 
-  ipcMain.handle("app:import-ets2", () => {
-    const result = importFromETS2(settings.ets2Dir, stations, mainLogger);
+  ipcMain.handle("app:import-game", () => {
+    const result = importFromGame(getCurrentGameId(settings), getCurrentGameDir(settings), stations, mainLogger);
     if (!result.ok) return result;
     persistStations(result.stations);
     return {

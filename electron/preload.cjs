@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld("radioApi", {
   addStation: (payload) => ipcRenderer.invoke("app:add-station", payload),
   updateStation: (index, payload) => ipcRenderer.invoke("app:update-station", index, payload),
   deleteStations: (names) => ipcRenderer.invoke("app:delete-stations", names),
-  importETS2: () => ipcRenderer.invoke("app:import-ets2"),
+  importGame: () => ipcRenderer.invoke("app:import-game"),
   startRelays: () => ipcRenderer.invoke("app:start-relays"),
   stopRelays: () => ipcRenderer.invoke("app:stop-relays"),
 });
