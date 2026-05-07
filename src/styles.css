@@ -117,11 +117,11 @@ svg {
 .brand-panel {
   border: 1px solid transparent;
   background: transparent;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 12px;
-  text-align: left;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 18px 16px 16px;
+  text-align: center;
   border-radius: 20px;
   cursor: pointer;
   transition: 180ms ease;
@@ -134,22 +134,19 @@ svg {
 
 .brand-copy {
   min-width: 0;
-  flex: 1;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  width: 100%;
 }
 
 .brand-heading-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 8px;
-  margin-bottom: 4px;
-}
-
-.panel-kicker {
-  color: var(--muted);
-  font-size: 0.64rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  margin-bottom: 0;
+  width: 100%;
 }
 
 .brand-mark {
@@ -191,27 +188,14 @@ svg {
   box-shadow: 0 0 18px rgba(25, 195, 192, 0.55);
 }
 
-.brand-panel strong {
-  display: block;
-  font-size: 1.92rem;
-  line-height: 0.9;
-  letter-spacing: -0.04em;
-}
-
-.brand-panel .brand-subtitle {
-  display: block;
-  color: var(--muted);
-  font-size: 0.71rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
 .brand-panel small {
   display: block;
-  margin-top: 8px;
-  color: #c2d6e4;
-  font-size: 0.78rem;
-  line-height: 1.45;
+  margin-top: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.2;
+  font-weight: 600;
+  text-align: center;
 }
 
 .relay-state-pill {
@@ -1841,19 +1825,6 @@ svg {
 
 .game-session-art.ats {
   background-color: #2b1913;
-}
-
-.game-session-short {
-  display: inline-flex;
-  align-items: center;
-  height: 34px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: rgba(4, 12, 19, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
 }
 
 .game-session-card-body {

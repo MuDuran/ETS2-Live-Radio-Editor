@@ -614,6 +614,19 @@ export default function App() {
     }
     return t("status_running_summary_idle", { total: summary.totalStations });
   }, [summary, telemetry, language]);
+  const brandSummary = useMemo(() => {
+    if (!summary) return "";
+    if (telemetry?.startupInProgress) {
+      return t("brand_runtime_starting", { count: telemetry.startingRelays });
+    }
+    if (summary.relayEnabled) {
+      return t("brand_runtime_live", {
+        running: summary.runningRelays,
+        prepared: summary.preparedRelays,
+      });
+    }
+    return t("brand_runtime_idle", { total: summary.totalStations });
+  }, [summary, telemetry, language]);
 
   const checkedStations = useMemo(() => {
     const keys = new Set(checkedStationKeys);
@@ -1101,12 +1114,9 @@ export default function App() {
 
             <div className="brand-copy">
               <div className="brand-heading-row">
-                <span className="panel-kicker">{t("app_title")}</span>
                 <span className={summary.relayEnabled ? "relay-state-pill on" : "relay-state-pill off"}>{relayStateLabel}</span>
               </div>
-              <strong>ET2</strong>
-              <span className="brand-subtitle">RADIO RELAYS</span>
-              <small>{runtimeSummary}</small>
+              <small>{brandSummary}</small>
             </div>
           </button>
 
@@ -1819,9 +1829,7 @@ export default function App() {
                     <div
                       className={`game-session-art ${profile.id}`}
                       style={{ backgroundImage: `url(${GAME_CARD_IMAGES[profile.id]})` }}
-                    >
-                      <span className="game-session-short">{profile.shortName}</span>
-                    </div>
+                    />
                     <div className="game-session-card-body">
                       <div className="game-session-card-head">
                         <strong>{profile.name}</strong>
