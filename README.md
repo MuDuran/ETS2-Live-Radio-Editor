@@ -23,7 +23,7 @@ Instead of manually editing `live_streams.sii`, searching for direct stream URLs
 - on-demand relay architecture to reduce CPU and memory spikes
 - bundled `ffmpeg` for Windows distribution builds
 - environment diagnostics for ETS2, ATS, and `ffmpeg`
-- system tray support, with the best experience currently tuned for Windows
+- system tray support, with Linux defaulting to the main-window flow unless `ETS2_ENABLE_LINUX_TRAY=1` is set
 - accessibility and appearance customization
 
 ### First use
@@ -39,6 +39,7 @@ This project depends on `ffmpeg` to relay radio audio into ETS2 or ATS.
 - In packaged Windows builds, `ffmpeg` is bundled with the app during the release process.
 - In Linux builds, the first supported path uses a system `ffmpeg` installation detected from the machine.
 - In local development, the app can still use a system installation such as `C:\ffmpeg\bin\ffmpeg.exe` or `/usr/bin/ffmpeg` if needed.
+- On Linux, the app now favors a compatibility-first renderer path and keeps tray integration disabled by default unless `ETS2_ENABLE_LINUX_TRAY=1` is set explicitly.
 
 Official project:
 - [FFmpeg official website](https://ffmpeg.org/)
@@ -173,7 +174,7 @@ Em vez de editar o `live_streams.sii` manualmente, procurar links diretos de str
 - arquitetura de relay sob demanda para reduzir picos de CPU e memória
 - `ffmpeg` embarcado nas builds de distribuição para Windows
 - diagnóstico de ambiente para ETS2, ATS e `ffmpeg`
-- suporte a bandeja do sistema, com a melhor experiência atual ajustada para Windows
+- suporte a bandeja do sistema, com o Linux seguindo o fluxo principal da janela por padrão, a menos que `ETS2_ENABLE_LINUX_TRAY=1` seja definido
 - acessibilidade e personalização visual
 
 ### Primeiro uso
@@ -189,6 +190,7 @@ Este projeto depende do `ffmpeg` para entregar o áudio das rádios ao ETS2 ou A
 - Nas builds empacotadas para Windows, o `ffmpeg` é incluído no app durante o processo de release.
 - Nas builds Linux, o primeiro caminho suportado usa um `ffmpeg` já instalado no sistema.
 - No desenvolvimento local, o app também pode usar uma instalação do sistema, como `C:\ffmpeg\bin\ffmpeg.exe` ou `/usr/bin/ffmpeg`, quando necessário.
+- No Linux, o app agora prioriza um caminho de renderização mais compatível e deixa a bandeja desativada por padrão, a menos que `ETS2_ENABLE_LINUX_TRAY=1` seja definido manualmente.
 
 Projeto oficial:
 - [Site oficial do FFmpeg](https://ffmpeg.org/)

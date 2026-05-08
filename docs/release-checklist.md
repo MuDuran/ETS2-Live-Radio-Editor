@@ -19,6 +19,7 @@ Use this checklist before publishing a new version of the app.
    - ET2 relay toggle
    - tray minimize/restore
    - PayPal support button
+   - Linux launch smoke test with system `ffmpeg`, confirming the main window opens even when tray integration is unavailable
 4. Confirm the bundled `ffmpeg` is present in the packaged app.
    The GitHub Release workflow prepares this file automatically before packaging.
    Linux AppImage builds currently expect `ffmpeg` to come from the target machine instead of bundling a Linux binary.
@@ -46,6 +47,7 @@ Use esta checklist antes de publicar uma nova versão do app.
    - botão ET2 para ligar/desligar relay
    - minimizar/restaurar pela bandeja
    - botão de apoio via PayPal
+   - smoke test de abertura no Linux com `ffmpeg` do sistema, confirmando que a janela principal abre mesmo quando a integração de bandeja não está disponível
 4. Confirme se o `ffmpeg` embarcado está dentro do app empacotado.
    A workflow de Release do GitHub prepara esse arquivo automaticamente antes do empacotamento.
    Hoje o build Linux em `AppImage` espera encontrar o `ffmpeg` já instalado na máquina de destino, em vez de embutir um binário Linux.

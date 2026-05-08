@@ -37,8 +37,38 @@ let stations = [];
 let settings = null;
 let environment = null;
 let tray = null;
+let trayEnabled = false;
 let isQuitting = false;
 let mainLogger = null;
+
+function shouldUseTray() {
+  if (PLATFORM === "linux") {
+    return process.env.ETS2_ENABLE_LINUX_TRAY === "1";
+  }
+
+  return true;
+}
+
+function configurePlatformRuntime() {
+  if (PLATFORM !== "linux") {
+    return;
+  }
+
+  // Linux desktop environments vary a lot across Wayland/X11 and VM setups.
+  // Favor the more compatible software path for this utility-style UI.
+  app.disableHardwareAcceleration();
+  app.commandLine.appendSwitch("disable-gpu-compositing");
+  app.commandLine.appendSwitch(
+    "disable-features",
+    [
+      "AcceleratedVideoDecodeLinuxGL",
+      "AcceleratedVideoEncoder",
+      "UseChromeOSDirectVideoDecoder",
+      "VaapiVideoDecoder",
+      "VaapiVideoEncoder",
+    ].join(",")
+  );
+}
 
 function getRendererUrl() {
   return process.env.ELECTRON_RENDERER_URL || null;
@@ -434,7 +464,7 @@ function showMainWindow() {
 }
 
 function updateTrayMenu() {
-  if (!tray) return;
+  if (!trayEnabled || !tray) return;
 
   const visibilityKey =
     mainWindow && !mainWindow.isDestroyed() && mainWindow.isVisible() ? "tray_status_visible" : "tray_status_hidden";
@@ -468,9 +498,30 @@ function updateTrayMenu() {
 }
 
 function createTray() {
-  tray = new Tray(createTrayIcon());
-  tray.on("click", () => showMainWindow());
-  updateTrayMenu();
+  if (!shouldUseTray()) {
+    trayEnabled = false;
+    mainLogger?.info("Tray disabled for current platform", {
+      platform: PLATFORM,
+    });
+    return;
+  }
+
+  try {
+    tray = new Tray(createTrayIcon());
+    trayEnabled = true;
+    tray.on("click", () => showMainWindow());
+    updateTrayMenu();
+    mainLogger?.info("Tray created successfully", {
+      platform: PLATFORM,
+    });
+  } catch (error) {
+    tray = null;
+    trayEnabled = false;
+    mainLogger?.warn("Tray initialization failed; continuing without tray", {
+      platform: PLATFORM,
+      reason: error.message || "unknown",
+    });
+  }
 }
 
 function createWindow() {
@@ -506,7 +557,7 @@ function createWindow() {
   });
 
   mainWindow.on("minimize", (event) => {
-    if (isQuitting) return;
+    if (isQuitting || !trayEnabled) return;
     event.preventDefault();
     mainWindow.hide();
     updateTrayMenu();
@@ -734,6 +785,8 @@ function registerIpc() {
     };
   });
 }
+
+configurePlatformRuntime();
 
 app.whenReady().then(() => {
   if (process.platform === "win32") {
