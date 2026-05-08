@@ -1,10 +1,18 @@
 const fs = require("node:fs");
+const os = require("node:os");
 const path = require("node:path");
 const { execFileSync } = require("node:child_process");
 const { app, BrowserWindow, ipcMain, Menu, Tray, nativeImage, shell } = require("electron");
 const { createStorage } = require("./storage.cjs");
 const { createLogger } = require("./logger.cjs");
-const { DEFAULT_GAME, DEFAULT_GAME_DIRECTORIES, DEFAULT_FFMPEG, BUNDLED_FFMPEG, GAME_PROFILES } = require("./constants.cjs");
+const {
+  DEFAULT_GAME,
+  DEFAULT_GAME_DIRECTORIES,
+  DEFAULT_FFMPEG,
+  BUNDLED_FFMPEG,
+  GAME_PROFILES,
+  PLATFORM,
+} = require("./constants.cjs");
 const {
   normalizeStation,
   suggestNextPort,
@@ -17,6 +25,10 @@ const { RelayService } = require("./relay-service.cjs");
 const { version: appVersion } = require("../package.json");
 const translationPayload = require("../shared/translations.json");
 const APP_USER_MODEL_ID = "com.muduran.ets2-live-radio-editor";
+const STEAM_APP_IDS = {
+  ets2: "227300",
+  ats: "270880",
+};
 
 let mainWindow = null;
 let storage = null;
@@ -74,16 +86,77 @@ function getCurrentGameDir(currentSettings = settings) {
   return currentSettings?.gameDirs?.[gameId] || DEFAULT_GAME_DIRECTORIES[gameId];
 }
 
-function detectGameAvailability(currentSettings, gameId) {
+function getLinuxSteamRoots() {
+  const homeDir = os.homedir();
+
+  return uniquePaths([
+    path.join(homeDir, ".steam", "steam"),
+    path.join(homeDir, ".steam", "root"),
+    path.join(homeDir, ".local", "share", "Steam"),
+    path.join(homeDir, ".var", "app", "com.valvesoftware.Steam", ".local", "share", "Steam"),
+  ]);
+}
+
+function getLinuxGameDirectoryCandidates(profile) {
+  const steamAppId = STEAM_APP_IDS[profile.id];
+  const userNames = uniquePaths([
+    "steamuser",
+    "deck",
+    process.env.USER,
+    process.env.LOGNAME,
+  ]);
+
+  const protonCandidates = getLinuxSteamRoots().flatMap((steamRoot) =>
+    userNames.map((userName) =>
+      path.join(
+        steamRoot,
+        "steamapps",
+        "compatdata",
+        steamAppId,
+        "pfx",
+        "drive_c",
+        "users",
+        userName,
+        "Documents",
+        profile.documentsFolderName
+      )
+    )
+  );
+
+  return uniquePaths([
+    path.join(os.homedir(), "Documents", profile.documentsFolderName),
+    path.join(app.getPath("home"), "Documents", profile.documentsFolderName),
+    ...protonCandidates,
+  ]);
+}
+
+function getGameDirectoryCandidates(currentSettings, gameId) {
   const documentsDir = app.getPath("documents");
   const profile = getGameProfile(gameId);
   const configuredDir = currentSettings?.gameDirs?.[gameId] || DEFAULT_GAME_DIRECTORIES[gameId];
-  const candidates = [
+  const defaultCandidates = [
     configuredDir,
     path.join(documentsDir, profile.documentsFolderName),
     DEFAULT_GAME_DIRECTORIES[gameId],
-    path.join(process.env.USERPROFILE || "", "OneDrive", "Documents", profile.documentsFolderName),
   ];
+
+  if (PLATFORM === "win32") {
+    return uniquePaths([
+      ...defaultCandidates,
+      path.join(process.env.USERPROFILE || "", "OneDrive", "Documents", profile.documentsFolderName),
+    ]);
+  }
+
+  return uniquePaths([
+    ...defaultCandidates,
+    ...getLinuxGameDirectoryCandidates(profile),
+  ]);
+}
+
+function detectGameAvailability(currentSettings, gameId) {
+  const profile = getGameProfile(gameId);
+  const configuredDir = currentSettings?.gameDirs?.[gameId] || DEFAULT_GAME_DIRECTORIES[gameId];
+  const candidates = getGameDirectoryCandidates(currentSettings, gameId);
   const resolvedDir = findFirstExisting(candidates, (candidate) => fs.existsSync(candidate) && fs.statSync(candidate).isDirectory());
   const finalDir = resolvedDir || configuredDir || DEFAULT_GAME_DIRECTORIES[gameId];
   const liveStreamsPath = path.join(finalDir, "live_streams.sii");
@@ -116,7 +189,7 @@ function findFirstExisting(paths, validator = (candidate) => fs.existsSync(candi
 
 function readFfmpegFromPath() {
   try {
-    const output = execFileSync("where.exe", ["ffmpeg"], {
+    const output = execFileSync(PLATFORM === "win32" ? "where.exe" : "which", ["ffmpeg"], {
       windowsHide: true,
       encoding: "utf-8",
       stdio: ["ignore", "pipe", "ignore"],
@@ -128,6 +201,22 @@ function readFfmpegFromPath() {
   } catch {
     return [];
   }
+}
+
+function getPlatformFfmpegCandidates(currentSettings) {
+  if (PLATFORM === "win32") {
+    return [
+      path.join(process.env.ProgramFiles || "", "ffmpeg", "bin", "ffmpeg.exe"),
+      path.join(process.env["ProgramFiles(x86)"] || "", "ffmpeg", "bin", "ffmpeg.exe"),
+      path.join(process.env.LOCALAPPDATA || "", "Microsoft", "WinGet", "Links", "ffmpeg.exe"),
+    ];
+  }
+
+  return [
+    "/usr/bin/ffmpeg",
+    "/usr/local/bin/ffmpeg",
+    "/var/lib/flatpak/exports/bin/org.ffmpeg.FFmpeg",
+  ];
 }
 
 function detectEnvironment(currentSettings) {
@@ -143,9 +232,7 @@ function detectEnvironment(currentSettings) {
     BUNDLED_FFMPEG,
     currentSettings.ffmpegPath,
     DEFAULT_FFMPEG,
-    path.join(process.env.ProgramFiles || "", "ffmpeg", "bin", "ffmpeg.exe"),
-    path.join(process.env["ProgramFiles(x86)"] || "", "ffmpeg", "bin", "ffmpeg.exe"),
-    path.join(process.env.LOCALAPPDATA || "", "Microsoft", "WinGet", "Links", "ffmpeg.exe"),
+    ...getPlatformFfmpegCandidates(currentSettings),
     ...readFfmpegFromPath(),
   ];
   const resolvedFfmpegPath = findFirstExisting(ffmpegCandidates);

@@ -13,6 +13,7 @@
     "verify:packaged-ffmpeg": "node scripts/verify-bundled-ffmpeg.cjs dist-electron/win-unpacked/resources/vendor/ffmpeg/ffmpeg.exe",
     "build": "npm run build:renderer && npm run verify:release && electron-builder",
     "build:release": "npm run build:renderer && npm run verify:release && npm run verify:bundled-ffmpeg && electron-builder --publish never && npm run verify:packaged-ffmpeg",
+    "build:release:linux": "npm run build:renderer && npm run verify:release && electron-builder --linux AppImage --publish never",
     "preview": "vite preview"
   },
   "build": {
@@ -45,6 +46,13 @@
         "nsis"
       ],
       "signAndEditExecutable": true
+    },
+    "linux": {
+      "icon": "assets/icons",
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility"
     },
     "nsis": {
       "oneClick": false,
