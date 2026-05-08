@@ -21,9 +21,9 @@ Instead of manually editing `live_streams.sii`, searching for direct stream URLs
 - radio catalog search and assisted add flow
 - automatic `live_streams.sii` sync after add, edit, and delete
 - on-demand relay architecture to reduce CPU and memory spikes
-- bundled `ffmpeg` for distribution builds
+- bundled `ffmpeg` for Windows distribution builds
 - environment diagnostics for ETS2, ATS, and `ffmpeg`
-- system tray support on Windows
+- system tray support, with Linux defaulting to the main-window flow unless `ETS2_ENABLE_LINUX_TRAY=1` is set
 - accessibility and appearance customization
 
 ### First use
@@ -37,7 +37,9 @@ This initial import loads the radios that already exist in the selected game's c
 This project depends on `ffmpeg` to relay radio audio into ETS2 or ATS.
 
 - In packaged Windows builds, `ffmpeg` is bundled with the app during the release process.
-- In local development, the app can still use a system installation such as `C:\ffmpeg\bin\ffmpeg.exe` if needed.
+- In Linux builds, the first supported path uses a system `ffmpeg` installation detected from the machine.
+- In local development, the app can still use a system installation such as `C:\ffmpeg\bin\ffmpeg.exe` or `/usr/bin/ffmpeg` if needed.
+- On Linux, the app now favors a compatibility-first renderer path and keeps tray integration disabled by default unless `ETS2_ENABLE_LINUX_TRAY=1` is set explicitly.
 
 Official project:
 - [FFmpeg official website](https://ffmpeg.org/)
@@ -61,7 +63,7 @@ Official project:
 - `assets/`
   Icons and visual assets used by the app.
 - `vendor/ffmpeg/`
-  Bundled `ffmpeg` used in packaged builds.
+  Bundled `ffmpeg` used in packaged Windows builds.
 - `review-log-2026-05-05.md`
   Technical review history with problems, risks, fixes, and validation notes.
 
@@ -89,6 +91,15 @@ npm run build:release
 
 This command is important because it forces `electron-builder` to package with `--publish never`, leaving GitHub Release publishing to the workflow step that uploads the `.exe` files.
 
+For Linux packaging, the project also provides:
+
+```powershell
+cd "<project-root>"
+npm run build:release:linux
+```
+
+This command builds the renderer, verifies the packaged asset paths, and generates an `AppImage` for Linux distribution.
+
 The release build now includes an extra safety validation step before packaging:
 
 - it verifies that `dist/index.html` uses relative asset paths such as `./assets/...`
@@ -102,19 +113,20 @@ cd "<project-root>"
 npm run verify:release
 ```
 
-Current Windows build targets:
+Current distribution build targets:
 
 - `portable` `.exe`
 - `nsis` installer `.exe`
+- Linux `AppImage`
 
 ### GitHub automation
 
 This repository includes two GitHub Actions workflows:
 
 - `CI`
-  Runs on pushes to `main` and on pull requests. It installs dependencies, checks the main Electron files, builds the renderer, and runs TypeScript validation.
+  Runs on pushes to `main` and on pull requests. It installs dependencies on Windows and Ubuntu, checks the main Electron files, builds the renderer, runs TypeScript validation, and smoke-tests the Linux AppImage packaging flow.
 - `Release`
-  Runs on Windows when you push a tag like `v0.2.0` or start it manually from GitHub Actions. It builds the app and publishes the generated `.exe` files in a GitHub Release.
+  Runs on Windows and Ubuntu when you push a tag like `v0.2.0` or start it manually from GitHub Actions. It builds the app and publishes the generated `.exe` and `.AppImage` files in a GitHub Release.
 
 Release steps at a high level:
 
@@ -160,9 +172,9 @@ Em vez de editar o `live_streams.sii` manualmente, procurar links diretos de str
 - busca de rádios por catálogo com fluxo guiado
 - sincronização automática do `live_streams.sii` ao adicionar, editar e excluir
 - arquitetura de relay sob demanda para reduzir picos de CPU e memória
-- `ffmpeg` embarcado nas builds de distribuição
+- `ffmpeg` embarcado nas builds de distribuição para Windows
 - diagnóstico de ambiente para ETS2, ATS e `ffmpeg`
-- suporte a bandeja do sistema no Windows
+- suporte a bandeja do sistema, com o Linux seguindo o fluxo principal da janela por padrão, a menos que `ETS2_ENABLE_LINUX_TRAY=1` seja definido
 - acessibilidade e personalização visual
 
 ### Primeiro uso
@@ -176,7 +188,9 @@ Essa importação inicial carrega para o app as rádios que já existem no arqui
 Este projeto depende do `ffmpeg` para entregar o áudio das rádios ao ETS2 ou ATS.
 
 - Nas builds empacotadas para Windows, o `ffmpeg` é incluído no app durante o processo de release.
-- No desenvolvimento local, o app também pode usar uma instalação do sistema, como `C:\ffmpeg\bin\ffmpeg.exe`, quando necessário.
+- Nas builds Linux, o primeiro caminho suportado usa um `ffmpeg` já instalado no sistema.
+- No desenvolvimento local, o app também pode usar uma instalação do sistema, como `C:\ffmpeg\bin\ffmpeg.exe` ou `/usr/bin/ffmpeg`, quando necessário.
+- No Linux, o app agora prioriza um caminho de renderização mais compatível e deixa a bandeja desativada por padrão, a menos que `ETS2_ENABLE_LINUX_TRAY=1` seja definido manualmente.
 
 Projeto oficial:
 - [Site oficial do FFmpeg](https://ffmpeg.org/)
@@ -200,7 +214,7 @@ Projeto oficial:
 - `assets/`
   Ícones e recursos visuais usados pelo app.
 - `vendor/ffmpeg/`
-  `ffmpeg` embarcado usado nas builds empacotadas.
+  `ffmpeg` embarcado usado nas builds empacotadas de Windows.
 - `review-log-2026-05-05.md`
   Histórico técnico das revisões com problemas, riscos, correções e validações.
 
@@ -228,6 +242,15 @@ npm run build:release
 
 Esse comando e importante porque força o `electron-builder` a empacotar com `--publish never`, deixando a publicacao da GitHub Release para a etapa da workflow que anexa os arquivos `.exe`.
 
+Para empacotamento Linux, o projeto tambem oferece:
+
+```powershell
+cd "<pasta-do-projeto>"
+npm run build:release:linux
+```
+
+Esse comando gera o renderer, valida os caminhos dos assets empacotados e produz um `AppImage` para distribuicao no Linux.
+
 O build de release agora inclui uma validação extra antes do empacotamento:
 
 - verifica se o `dist/index.html` usa caminhos relativos como `./assets/...`
@@ -241,19 +264,20 @@ cd "<pasta-do-projeto>"
 npm run verify:release
 ```
 
-Atualmente o build do Windows gera:
+Atualmente os builds de distribuicao geram:
 
 - `.exe` portátil
 - instalador `.exe` via NSIS
+- `AppImage` para Linux
 
 ### Automação no GitHub
 
 Este repositório agora inclui duas workflows do GitHub Actions:
 
 - `CI`
-  Roda em pushes para `main` e em pull requests. Ela instala as dependências, valida os arquivos principais do Electron, gera o build do renderer e roda a validação de TypeScript.
+  Roda em pushes para `main` e em pull requests. Ela instala as dependências em Windows e Ubuntu, valida os arquivos principais do Electron, gera o build do renderer, roda a validação de TypeScript e faz um smoke test do empacotamento Linux em `AppImage`.
 - `Release`
-  Roda no Windows quando você envia uma tag como `v0.2.0` ou dispara manualmente pelo GitHub Actions. Ela gera o app e publica os arquivos `.exe` em uma GitHub Release.
+  Roda em Windows e Ubuntu quando você envia uma tag como `v0.2.0` ou dispara manualmente pelo GitHub Actions. Ela gera o app e publica os arquivos `.exe` e `.AppImage` em uma GitHub Release.
 
 Fluxo de release em alto nível:
 
